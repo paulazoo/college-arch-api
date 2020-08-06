@@ -129,3 +129,14 @@ you must pass a Google OAuth JWT authorization token. Pass via the following req
 - _PUT /events/:id_: edits and updates the event of `:id`
   - same allowed params as creating a new event
 - _DELETE /events/:id_: destroys the event of `:id`
+
+### Google Sheets
+- _POST /google_sheets/import_mentee_mentor_: import mentee and mentor contact information and matches
+  - from the google sheet `import_mentee_mentor`
+- _POST /google_sheets/import_events_: import a list of events with their respective event params
+  - from the google sheet  `import_events`
+  - NOTE: will create a new event for each row every time this is run
+- _POST /google_sheets/export_registered_: export the registrations for an event
+  - will export into the google sheet `export_registered`
+- _POST /google_sheets/export_joined_: export everyone who has clicked the join button for an event
+  - will export into the google sheet `export_joined`
