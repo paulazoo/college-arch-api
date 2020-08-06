@@ -50,6 +50,7 @@ You can only request the server from the following origins:
 - _host_: string, event host
 - _description_: string, description of event
 - _link_: string, link to event (e.g. zoom link)
+- _public_link_: string, link to public facebook live stream of event
 - _image_url_: string, event picture url (NOT IN USE)
 - _start_time_: `DateTime`, starting time
 - _end_time_: `DateTime`, ending time
@@ -75,6 +76,7 @@ _IMPORTANT: for all endpoints EXCEPT for:
   - /login
   - POST /newsletter_emails
   - GET /events/public
+  - POST /mentors/master
 you must pass a Google OAuth JWT authorization token. Pass via the following request header:_
 
 `Authorization: Bearer [TOKEN]`
@@ -83,14 +85,17 @@ you must pass a Google OAuth JWT authorization token. Pass via the following req
 - _GET /login_: returns account corresponding to token
 - _GET /accounts_: returns list of all accounts (MUST be `is_master`)
 - _GET /accounts/:id_: returns account information corresponding to `:account_id` (MUST be same account as `current_account` or `is_master`)
-- _PUT /accounts/:id_: updates account information corresponding to `:account_id` (MUST be same account as `current_account` or `is_master`)
+- _PUT /accounts/:id_: updates account information corresponding to `:id` (MUST be same account as `current_account` or `is_master`)
+- _POST /accounts/master_update_: update another person's account information corresponding to `:other_account_id` (MUST BE `is_master`)
 
 ### Mentee
 - _GET /mentees_: returns list of all mentees (MUST be `is_master`)
 - _POST /mentees_: create new mentee and corresponding account
   - allowed params: `:email` as the email of associated account
-- _POST /mentees/:mentee_id/match_: match a mentee with a mentor
+- _POST /mentees/match_: match a mentee with a mentor
   - allowed params: `:mentee_id, :mentor_id`
+- _POST /mentees/unmatch_: unmatch a mentee from their corresponding mentor
+  - allowed params: `:mentee_id`
 - _POST /mentees/batch_: batch creation of new mentees and corresponding accounts
   - allowed params: `:batch_emails` as a string of emails delimited by `, `
 
@@ -100,6 +105,9 @@ you must pass a Google OAuth JWT authorization token. Pass via the following req
   - allowed params: `:email` as the email of associated account
 - _POST /mentors/batch_: batch creation of new mentors and corresponding accounts
   - allowed params: `:batch_emails` as a string of emails delimited by `, `
+- _POST /mentors/master_: creation of master account
+  - allowed params: `:email`, `:master_creation_password`
+
 
 ### Newsletter Email
 - _GET /events_: returns list of all events (MUST be `is_master`)
@@ -108,8 +116,16 @@ you must pass a Google OAuth JWT authorization token. Pass via the following req
 
 ### Event
 - _GET /events_: returns list of all events (MUST be `is_master`)
-- _POST /events_: create new event
-  - allowed params: `:name, :host, :kind, :description, :link, :start_time, :end_time, :image_url` and `:invites` as an _array of user emails_
-  - NOTE: start_time and end_time must be sent as an ISO 8601 string
 - _GET /events/public_: returns list of all `open` events
-
+- _POST /events/:id/register_: register for an event
+- _POST /events/:id/unregister_: unregister for an event
+- _POST /events/:id/public_register: register publicly for an event
+- _POST /events/:id/join_: join an event
+- _POST /events/:id/public_join_: publicly join an event
+- _POST /events_: create new event
+  - allowed params: `:name, :host, :kind, :description, :link, :public_link, :start_time, :end_time, :image_url` and `:invites` as an _array of user emails_
+  - NOTE: `:kind` must be either `open`, `fellows_only`, or `invite_only`
+  - NOTE: `:start_time` and `:end_time` must be sent as an ISO 8601 string
+- _PUT /events/:id_: edits and updates the event of `:id`
+  - same allowed params as creating a new event
+- _DELETE /events/:id_: destroys the event of `:id`
