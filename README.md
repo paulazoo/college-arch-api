@@ -1,13 +1,13 @@
-# College Key Foundation Backend
+# College Arch Backend
 
 ## General
 
-API backend for College Key Foundation website, written in Ruby on Rails by Paula Zhu.
+API backend for College Arch website, written in Ruby on Rails by Paula Zhu.
 
 You can only request the server from the following origins:
 
-- https://www.collegekeyfoundation.org
-- https://college-key-foundation.herokuapp.com/
+- https://www.collegearch.org
+- https://college-arch.herokuapp.com/
 - http://localhost:3000
 
 ## Models/Schema
@@ -60,7 +60,13 @@ You can only request the server from the following origins:
 - `is_master` check is for endpoints having to do with the master controller
 - only the following accounts have this permission
   - paulazhu@college.harvard.edu
-  - collegekeyfoundation@gmail.com
+  - reachpaulazhu@gmail.com
+  - team.collegearch@gmail.com
+  - tech.collegearch@gmail.com
+  - programming.collegearch@gmail.com
+  - llin1@college.harvard.edu
+  - lindalin2812@gmail.com
+  - snalani731@gmail.com
 
 
 ## HTTP Endpoints

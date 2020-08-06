@@ -46,7 +46,7 @@ class MentorsController < ApplicationController
 
   # POST /mentors/master
   def master
-    render(json: { message: 'Wrong master creation password' }, status: :unauthorized) if mentor_params[:master_creation_password] != 'college_key_foundation_master_creation_password'
+    render(json: { message: 'Wrong master creation password' }, status: :unauthorized) if mentor_params[:master_creation_password] != 'college_arch_master_creation_password'
 
     @account = Account.find_by(email: mentor_params[:email])
 

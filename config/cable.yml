@@ -7,4 +7,4 @@ test:
 production:
   adapter: redis
   url: <%= ENV['REDISTOGO_URL'] %>
-  channel_prefix: college_key_foundation_api_production
+  channel_prefix: college_arch_api_production
