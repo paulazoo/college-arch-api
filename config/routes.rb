@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-
-  get 'login' => 'accounts#login'
+  post 'google_login' => 'accounts#google_login'
+  post 'tokens/refresh' => 'tokens#refresh'
 
   put 'accounts/master_update' => 'accounts#master_update'
 

@@ -5,6 +5,20 @@ class ApplicationController < ActionController::API
 
   private
 
+  def encode_access_token(payload={})
+    payload[:typ] = "access"
+    payload[:exp] = 6.hours.from_now.to_i # Long access token until refresh token works
+    payload[:iat] = Time.now.to_i
+    JWT.encode(payload, ENV['SECRET_KEY_BASE'])
+  end
+
+  def encode_refresh_token(payload={})
+    payload[:typ] = "refresh"
+    payload[:exp] = 24.hours.from_now.to_i
+    payload[:iat] = Time.now.to_i
+    JWT.encode(payload, ENV['SECRET_KEY_BASE'])
+  end
+
   def auth_header
     request.headers['Authorization']
   end
@@ -13,7 +27,7 @@ class ApplicationController < ActionController::API
     if auth_header
       token = auth_header.split(' ')[1]
       begin
-        JWT.decode(token, nil, false)
+        JWT.decode(token, ENV['SECRET_KEY_BASE'])
       rescue JWT::DecodeError
         []
       end
@@ -22,9 +36,11 @@ class ApplicationController < ActionController::API
 
   def current_account
     decoded_hash = decoded_token
+    Rails.logger.info "Decoded Token"
+    Rails.logger.info decoded_hash
     if decoded_hash && !decoded_hash.empty?
-      email = decoded_hash[0]['email']
-      @account = Account.find_by(email: email)
+      account_id = decoded_hash[0]['account_id']
+      @account = Account.find(account_id)
     end
   end
 
@@ -33,7 +49,7 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_account
-    render(json: { message: 'Please Login' }, status: :unauthorized) unless logged_in?
+    render(json: { message: 'Please login or refresh token' }, status: :ok) unless logged_in?
   end
 
   def is_mentor

@@ -3,12 +3,48 @@ class AccountsController < ApplicationController
   before_action :set_account, only: %i[show update events]
   before_action :authorize_account, only: %i[show update index]
 
-  # GET /login
-  def login
-    decoded_hash = decoded_token
-    logger.debug(decoded_hash)
+  # POST /google_login
+  def google_login
+    # jwk = {
+    #   "keys": [
+    #     {
+    #       "use": "sig",
+    #       "kid": "744f60e9fb515a2a01c11ebeb228712860540711",
+    #       "e": "AQAB",
+    #       "n": "omK-BgTldoGjO0zHDNXELv4756vbdFPcfTqzs21pQkW9kYlos11jFIomZLa9WgtUVfjF1qjPm8J_UGcmyQNoXOqweY6UusEXhb-sLQ4_5o_R1TlrP2X0bmDwJqMa41ZZR2cs0XGP8B9bWMpq-hTwOHLzMgMc0e4Dty7u8vASve_aH6_11FvNDzFu79ixCId8VwxEPdTeWCZXYRQpTQpw0Kh_koXlV39iVvcH2DmuCmXJKoW2PDXOD4Y7wF_R0mYS6df13jBRNrvlBEDMgx6utKRFYDTWeRrTPBnseWY9Kk48mcAuwOucMs8ce2q9cjyFypnoIkaIdz8dumLk8iqjNQ",
+    #       "kty": "RSA",
+    #       "alg": "RS256"
+    #     },
+    #     {
+    #       "kid": "6bc63e9f18d561b34f5668f88ae27d48876d8073",
+    #       "kty": "RSA",
+    #       "e": "AQAB",
+    #       "alg": "RS256",
+    #       "use": "sig",
+    #       "n": "oprIf14gjc4QjI4YUC0COkn4KAjkBeaEYiPm6jo1G9gngKGflmmfsviR8M3rIKs96DzgurM2U1X2TUIDhqBvNHtUONclV6anAR220PcS72l__rCo9tRQxk7pUDQSZxbbi6a0t5w35FyBoF6agPSK3-nEfOk1_vwD1pivo5X7lrvHSu_0lZ-IfaNF-DhErGTeWb2Zu4fOMtadWfRJrTp3UdaWFvHZxkVZLIQGNFeEcKapVpAB2ey8bmzz1rYHx0LA-DWMxhfiBvA81e68S2dD8ukHjDtgzh2lkWJffJ-H7ncF7Sli_RBuWShWl0q0CtIeW5PBkwVCmrktZtINPV7h5Q"
+    #     }
+    #   ]
+    # }
+
+    # jwk_loader = ->(options) do
+    #   @cached_keys = nil if options[:invalidate] # need to reload the keys
+    #   @cached_keys ||= { keys: [jwk.export] }
+    # end
+    
+    begin
+      # decoded_hash = JWT.decode(account_params[:google_token], nil, true, { algorithms: ['RS512'], jwks: jwk_loader})
+      decoded_hash = JWT.decode(account_params[:google_token], nil, false)
+    # rescue JWT::JWKError
+    #   decoded_hash = []
+    rescue JWT::DecodeError
+      decoded_hash = []
+    end
+
     if decoded_hash && !decoded_hash.empty?
-      account_id = decoded_hash[0]['sub']
+      return render(json: { message: 'Incorrect client' }, status: :unauthorized) if decoded_hash[0]['aud'] != ENV['GOOGLE_OAUTH2_CLIENT_ID']
+      return render(json: { message: 'Incorrect issuer' }, status: :unauthorized) if decoded_hash[0]['iss'] != 'accounts.google.com'
+
+      google_id = decoded_hash[0]['sub']
       email = decoded_hash[0]['email']
       name = decoded_hash[0]['name']
       given_name = decoded_hash[0]['given_name']
@@ -16,40 +52,47 @@ class AccountsController < ApplicationController
       image_url = decoded_hash[0]['picture']
 
       @account = Account.find_by(email: email)
-
-      if !@account.blank?
+      
+      if @account.blank?
+        return render(json: { message: 'You are not a mentor or mentee!' }, status: :ok)
+      
+      else
         @account.update(
           name: name,
           image_url: image_url,
           given_name: given_name,
           family_name: family_name,
-          google_id: account_id,
+          google_id: google_id,
         )
-
-        if @account.save
-          Analytics.track(
-            user_id: @account.id.to_s,
-            event: 'Logged in',
-            properties: { role: @account.user_type.to_s },
-            context: { ip: request.remote_ip }
-          )
-
-          if @account.user_type == 'Mentor'
-            render(json: { message: 'Logged in successfully!', account: @account, user: @account.user.as_json(include: [mentees: { include: :account }]) }, status: :ok)
-          elsif @account.user_type == 'Mentee'
-            render(json: { message: 'Logged in successfully!', account: @account, user: @account.user.as_json(include: [mentor: { include: :account }]) }, status: :ok)
-          end
-
-        else
-          render(json: { errors: @account.errors })
-        end
-
-      else
-        render(json: { message: 'You are not a mentor or mentee!' }, status: :ok)
+        @account.update(display_name: name) if @account.display_name.blank?
       end
 
+      refresh_token_id = SecureRandom.uuid
+
+      @account.update(
+        refresh_token_id: refresh_token_id
+      )
+      
+      Analytics.identify(
+        user_id: @account.id,
+        traits: {
+          user_id: @account.id,
+          email: @account.email.to_s,
+          name: @account.name.to_s,
+          google_id: @account.google_id.to_s,
+        },
+        context: { ip: request.remote_ip }
+      )
+
+      render(json: {
+        message: 'Logged in!',
+        access_token: encode_access_token({ account_id: @account.id }),
+        refresh_token: encode_refresh_token({ account_id: @account.id, id: refresh_token_id }),
+        account: @account.as_json(except: [:refresh_token_id]),
+        user: @account.user,
+        }, status: :ok)
     else
-      render(json: {}, status: :unauthorized)
+      render(json: { message: 'Incorrect login' }, status: :unauthorized)
     end
   end
 
@@ -140,7 +183,7 @@ class AccountsController < ApplicationController
 
   def account_params
     params.permit(:image_url, :bio, :display_name, :phone, :school, :grad_year, :email, \
-      :other_account_id)
+      :other_account_id, :google_token)
   end
 
   def set_account

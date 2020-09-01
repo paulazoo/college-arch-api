@@ -149,8 +149,8 @@ class GoogleSheetsController < ApplicationController
     render(json: { message: 'Export successful!'})
   end
 
-  # mentee_name	mentor_name	mentee_email	mentor_email	mentee_phone	mentor_phone
-  #  0           1           2             3             4             5
+  # mentee_name	mentor_name	mentee_email	mentor_email	mentee_phone	mentor_phone classroom
+  #  0           1           2             3             4             5            6
   # POST /google_sheets/import_mentee_mentor
   def import_mentee_mentor
     session = GoogleDrive::Session.from_service_account_key("client_secret.json")
@@ -168,7 +168,7 @@ class GoogleSheetsController < ApplicationController
       if mentee_account.blank?
         @mentee = Mentee.new()
 
-        @mentee.account = Account.new(user: @mentee, email: r[2], phone: r[4], name: r[0])
+        @mentee.account = Account.new(user: @mentee, email: r[2], phone: r[4], name: r[0], classroom: r[6])
 
         if @mentee.save
         else
@@ -180,7 +180,7 @@ class GoogleSheetsController < ApplicationController
         
         @mentee = mentee_account.user
 
-        mentee_account.update(email: r[3], phone: r[5], name: r[0])
+        mentee_account.update(email: r[3], phone: r[5], name: r[0], classroom: r[6])
         
         if mentee_account.save
         else
