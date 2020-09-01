@@ -4,14 +4,43 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <h1>Welcome to collegearch.org,</h1>
+    <h1>Welcome to College ARCH (Access and Resources for College and Higher-education)!</h1>
+    <%# <hr class="solid"> %>
     <p>
+      Hi there,
+      <br>
       You have successfully set up your account at collegearch.org.
       <br>
+      To login to the site, click here: 
+      <br>
+      <a href=<%= @url %>>
+        <button type="button" 
+        style="background-color:hsl(213, 97%, 30%);
+        border:none;
+        color:white;
+        margin: 5px;
+        padding: 15px 32px;
+        text-align:center;
+        text-decoration:none;
+        display:inline-block;
+        font-size:16px;
+        border-radius:8px;"
+        role="button">
+          LOGIN
+        </button>
+      </a>
+      <br>
+      Thanks for joining and have a great day! 😊
     </p>
-    <p>
-      To login to the site, just follow this link: <%= @url %>.
-    </p>
-    <p>Thanks for joining and have a great day!</p>
+    <%# <div style="background-color:lightblue">
+      <p style="color:green">yoyoyo my name is paula zhu and this is some nice html</p>
+    </div> %>
+    <footer>
+      <br/>
+      <br/>
+      This email was generated automatically. Do not reply to this email.
+      <br/>
+      Questions? <b>Contact us at contact.collegearch@gmail.com</b>
+    </footer>
   </body>
 </html>

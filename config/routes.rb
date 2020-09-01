@@ -44,5 +44,6 @@ Rails.application.routes.draw do
   post 'google_sheets/export_registered' => 'google_sheets#export_registered'
   post 'google_sheets/export_joined' => 'google_sheets#export_joined'
 
+  post 'emails/mail' => 'emails#mail'
 
 end
