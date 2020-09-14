@@ -1,7 +1,7 @@
 class NewsletterEmailsController < ApplicationController
   before_action :authenticate_account, only: %i[index]
 
-  # GET newsletter_emails
+  # GET /newsletter_emails
   def index
     if is_master
       @newsletter_emails = NewsletterEmail.all
@@ -21,7 +21,6 @@ class NewsletterEmailsController < ApplicationController
       render(json: @newsletter_email.errors, status: :unprocessable_entity)
     end
   end
-
 
   private
 

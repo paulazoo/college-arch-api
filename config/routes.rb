@@ -4,6 +4,10 @@ Rails.application.routes.draw do
 
   put 'accounts/master_update' => 'accounts#master_update'
 
+  resources :mentee_applicants, only: %i[index create]
+  
+  resources :mentor_applicants, only: %i[index create]
+
   resources :accounts, only: [] do
     get 'events', on: :member
     post 'mail', on: :member

@@ -2,7 +2,7 @@ class EmailsController < ApplicationController
   # before_action :authenticate_account
   # before_action :authorize_account
 
-  # POST emails/mail
+  # POST /emails/mail
   def mail
     emails = ['sammysparkles@gmail.com']
     
