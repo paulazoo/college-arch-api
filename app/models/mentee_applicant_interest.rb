@@ -1,0 +1,2 @@
+class MenteeApplicantInterest < ApplicationRecord
+end

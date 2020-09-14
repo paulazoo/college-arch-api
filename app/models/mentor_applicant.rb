@@ -1,0 +1,2 @@
+class MentorApplicant < ApplicationRecord
+end
