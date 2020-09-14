@@ -2,5 +2,5 @@ class MentorSerializer < ActiveModel::Serializer
   attributes :id
 
   has_many :mentees
-  has_one :account
+  has_one :user
 end

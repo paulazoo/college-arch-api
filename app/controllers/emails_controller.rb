@@ -1,6 +1,6 @@
 class EmailsController < ApplicationController
-  # before_action :authenticate_account
-  # before_action :authorize_account
+  # before_action :authenticate_user
+  # before_action :authorize_user
 
   # POST /emails/mail
   def mail
@@ -9,7 +9,7 @@ class EmailsController < ApplicationController
     emails.each {
       |email|
 
-      AccountMailer.welcome_email(email).deliver_later
+      UserMailer.welcome_email(email).deliver_later
     }
 
     render(json: { message: 'Emails delivered!' })

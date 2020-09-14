@@ -1,12 +1,12 @@
 class MenteesController < ApplicationController
-  before_action :authenticate_account, only: %i[create index match unmatch batch]
+  before_action :authenticate_user, only: %i[create index match unmatch batch]
   before_action :set_mentee, only: %i[match unmatch]
 
-  # GET mentees
+  # GET /mentees
   def index
     if is_master
       @mentees = Mentee.all
-      render(json: @mentees.to_json(include: [:account, mentor: { include: :account }]))
+      render(json: @mentees.to_json(include: [:user, mentor: { include: :user }]))
     else
       render(json: { message: 'You are not master' }, status: :unauthorized)
     end
@@ -16,19 +16,19 @@ class MenteesController < ApplicationController
   def create
     render(json: { message: 'You are not master' }, status: :unauthorized) if !is_master
 
-    @account = Account.find_by(email: mentee_params[:email])
+    @user = User.find_by(email: mentee_params[:email])
 
-    if @account.blank?
+    if @user.blank?
       @mentee = Mentee.new()
 
-      @mentee.account = Account.new(user: @mentee, email: mentee_params[:email])
+      @mentee.user = User.new(account: @mentee, email: mentee_params[:email])
 
       if @mentee.save
         Analytics.identify(
-          user_id: @mentee.account.id.to_s,
+          user_id: @mentee.user.id.to_s,
           traits: {
             role: 'Mentee',
-            account_id: @mentee.account.id.to_s,
+            user_id: @mentee.user.id.to_s,
             email: mentee_params[:email],
           },
         )
@@ -39,7 +39,7 @@ class MenteesController < ApplicationController
       end
 
     else
-      render(json: { message: 'Account already exists' })
+      render(json: { message: 'User already exists' })
     end
   end
 
@@ -72,7 +72,7 @@ class MenteesController < ApplicationController
     @mentor = Mentor.find(mentee_params[:mentor_id])
     render(json: { message: 'Mentor does not exist'}) if @mentor.blank?
 
-    @mentors_mentee = MentorMentee.find_by(mentor: @mentor, mentee: @mentee)
+    @mentors_mentee = MentorsMentee.find_by(mentor: @mentor, mentee: @mentee)
     render(json: { message: 'Not matched' }) if @mentors_mentee.blank?
 
     @mentors_mentee.destroy
@@ -88,19 +88,19 @@ class MenteesController < ApplicationController
     finished_mentees = []
 
     parsed_emails.each do |email|
-      @account = Account.find_by(email: email)
+      @user = User.find_by(email: email)
 
-      if @account.blank?
+      if @user.blank?
         @mentee = Mentee.new()
 
-        @mentee.account = Account.new(user: @mentee, email: email)
+        @mentee.user = User.new(account: @mentee, email: email)
 
         if @mentee.save
           Analytics.identify(
-            user_id: @mentee.account.id.to_s,
+            user_id: @mentee.user.id.to_s,
             traits: {
               role: 'Mentee',
-              account_id: @mentee.account.id.to_s,
+              user_id: @mentee.user.id.to_s,
               email: email,
             },
           )
@@ -111,7 +111,7 @@ class MenteesController < ApplicationController
         end
 
       else
-        puts 'Account already exists'
+        puts 'User already exists'
       end
     end
 

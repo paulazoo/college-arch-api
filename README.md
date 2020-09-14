@@ -12,11 +12,11 @@ You can only request the server from the following origins:
 
 ## Models/Schema
 
-### Account
+### User
 - _name_: string, full name from google
 - _google_id_: string, Google ID
 - _email_: string, email used to login
-- _image_url_: string, profile picture url from google account
+- _image_url_: string, profile picture url from google
 - _given_name_: string, first name
 - _family_name_: string, last name
 - _display_name_: display name (NOT IN USE)
@@ -24,19 +24,19 @@ You can only request the server from the following origins:
 - _bio_: string, user bio
 - _school_: string, school
 - _grad_year_: integer, graduation year
-- _user_type_: string, either `Mentor` or `Mentee`
-- _user_id_: integer, the id of the associated `Mentor` or `Mentee` record
-- belongs to a user
+- _account_type_: string, either `Mentor` or `Mentee`
+- _account_id_: integer, the id of the associated `Mentor` or `Mentee` record
+- belongs to an account
 - has many invitations
 
 ### Mentee
 - _classroom_: string, the mentee's google classroom url
 - has one mentor
-- has one account
+- has one user
 
 ### Mentor
 - has many mentees
-- has one account
+- has one user
 
 ### Newsletter Emails
 - _email_: string, email
@@ -59,7 +59,7 @@ You can only request the server from the following origins:
 
 ## Masters
 - `is_master` check is for endpoints having to do with the master controller
-- only the following accounts have this permission
+- only the following users have this permission
   - paulazhu@college.harvard.edu
   - reachpaulazhu@gmail.com
   - team.collegearch@gmail.com
@@ -81,31 +81,31 @@ you must pass a Google OAuth JWT authorization token. Pass via the following req
 
 `Authorization: Bearer [TOKEN]`
 
-### Account
-- _GET /login_: returns account corresponding to token
-- _GET /accounts_: returns list of all accounts (MUST be `is_master`)
-- _GET /accounts/:id_: returns account information corresponding to `:account_id` (MUST be same account as `current_account` or `is_master`)
-- _PUT /accounts/:id_: updates account information corresponding to `:id` (MUST be same account as `current_account` or `is_master`)
-- _POST /accounts/master_update_: update another person's account information corresponding to `:other_account_id` (MUST BE `is_master`)
+### User
+- _GET /login_: returns users corresponding to token
+- _GET /users_: returns list of all users (MUST be `is_master`)
+- _GET /users/:id_: returns user information corresponding to `:id` (MUST be same user as `current_user` or `is_master`)
+- _PUT /users/:id_: updates user information corresponding to `:id` (MUST be same user as `current_user` or `is_master`)
+- _POST /users/master_update_: update another person's user information corresponding to `:other_user_id` (MUST BE `is_master`)
 
 ### Mentee
 - _GET /mentees_: returns list of all mentees (MUST be `is_master`)
-- _POST /mentees_: create new mentee and corresponding account
-  - allowed params: `:email` as the email of associated account
+- _POST /mentees_: create new mentee and corresponding user
+  - allowed params: `:email` as the email of associated user
 - _POST /mentees/match_: match a mentee with a mentor
   - allowed params: `:mentee_id, :mentor_id`
 - _POST /mentees/unmatch_: unmatch a mentee from their corresponding mentor
   - allowed params: `:mentee_id`
-- _POST /mentees/batch_: batch creation of new mentees and corresponding accounts
+- _POST /mentees/batch_: batch creation of new mentees and corresponding users
   - allowed params: `:batch_emails` as a string of emails delimited by `, `
 
 ### Mentor
 - _GET /mentors_: returns list of all mentors (MUST be `is_master`)
-- _POST /mentees_: create new mentor and corresponding account
-  - allowed params: `:email` as the email of associated account
-- _POST /mentors/batch_: batch creation of new mentors and corresponding accounts
+- _POST /mentees_: create new mentor and corresponding user
+  - allowed params: `:email` as the email of associated user
+- _POST /mentors/batch_: batch creation of new mentors and corresponding users
   - allowed params: `:batch_emails` as a string of emails delimited by `, `
-- _POST /mentors/master_: creation of master account
+- _POST /mentors/master_: creation of master user
   - allowed params: `:email`, `:master_creation_password`
 
 

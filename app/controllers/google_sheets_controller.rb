@@ -1,5 +1,5 @@
 class GoogleSheetsController < ApplicationController
-  before_action :authenticate_account
+  before_action :authenticate_user
 
   # name, description, link, kind, start_time, end_time, image_url, host, public_link, invites: []
   #  0    1            2     3     4           5          6          7     8            9
@@ -28,8 +28,8 @@ class GoogleSheetsController < ApplicationController
   
         if @event.kind === 'invite-only' && r[9]
           r[9].split(", ").each do |email|
-            a = Account.find_or_create_by(email: email)
-            @event.invitations.create!(account: a)
+            user = User.find_or_create_by(email: email)
+            @event.invitations.create!(user: user)
           end
         end
   
@@ -63,16 +63,16 @@ class GoogleSheetsController < ApplicationController
         ["Start Time:", @event.start_time.to_s],
         ["End Time:", @event.end_time.to_s],
         [""],
-        ["Logged In?", "Account Type", "Account Name", "Account Email", "Account Phone", \
+        ["Logged In?", "Account Type", "User Name", "User Email", "User Phone", \
           "Ip Address", "Public Name", "Public Email", "Registered?", "Joined?"],
       ]
     )
 
     @registered.each{ |r|
-      if !r.account.blank?
+      if !r.user.blank?
         worksheet.insert_rows(worksheet.num_rows + 1,
           [
-            ["Yes", r.account.user_type, r.account.name, r.account.email, r.account.phone, "N/A", "N/A", "N/A", r.registered, r.joined],
+            ["Yes", r.user.account_type, r.user.name, r.user.email, r.user.phone, "N/A", "N/A", "N/A", r.registered, r.joined],
           ]
         )
       else
@@ -117,16 +117,16 @@ class GoogleSheetsController < ApplicationController
         ["Start Time:", @event.start_time.to_s],
         ["End Time:", @event.end_time.to_s],
         [""],
-        ["Logged In?", "Account Type", "Account Name", "Account Email", "Account Phone", \
+        ["Logged In?", "Account Type", "User Name", "User Email", "User Phone", \
           "Ip Address", "Public Name", "Public Email", "Registered?", "Joined?"],
       ]
     )
 
     @joined.each{ |r| 
-      if !r.account.blank?
+      if !r.user.blank?
         worksheet.insert_rows(worksheet.num_rows + 1,
           [
-            ["Yes", r.account.user_type, r.account.name, r.account.email, r.account.phone, "N/A", "N/A", "N/A", r.registered, r.joined],
+            ["Yes", r.user.account_type, r.user.name, r.user.email, r.user.phone, "N/A", "N/A", "N/A", r.registered, r.joined],
           ]
         )
       else
@@ -163,12 +163,12 @@ class GoogleSheetsController < ApplicationController
       |r|
 
       # first create the mentee record
-      mentee_account = Account.find_by(email: r[2])
+      mentee_user = User.find_by(email: r[2])
 
-      if mentee_account.blank?
+      if mentee_user.blank?
         @mentee = Mentee.new()
 
-        @mentee.account = Account.new(user: @mentee, email: r[2], phone: r[4], name: r[0], classroom: r[6])
+        @mentee.user = User.new(account: @mentee, email: r[2], phone: r[4], name: r[0], classroom: r[6])
 
         if @mentee.save
         else
@@ -176,25 +176,25 @@ class GoogleSheetsController < ApplicationController
         end
 
       else
-        puts 'Account already exists'
+        puts 'User already exists'
         
-        @mentee = mentee_account.user
+        @mentee = mentee_user.account
 
-        mentee_account.update(email: r[3], phone: r[5], name: r[0], classroom: r[6])
+        mentee_user.update(email: r[3], phone: r[5], name: r[0], classroom: r[6])
         
-        if mentee_account.save
+        if mentee_user.save
         else
-          puts mentee_account.errors
+          puts mentee_user.errors
         end
       end
 
       # now create the mentor record
-      mentor_account = Account.find_by(email: r[3])
+      mentor_user = User.find_by(email: r[3])
 
-      if mentor_account.blank?
+      if mentor_user.blank?
         @mentor = Mentor.new()
 
-        @mentor.account = Account.new(user: @mentor, email: r[3], phone: r[5], name: r[1])
+        @mentor.user = User.new(account: @mentor, email: r[3], phone: r[5], name: r[1])
 
         if @mentor.save
         else
@@ -202,15 +202,15 @@ class GoogleSheetsController < ApplicationController
         end
 
       else
-        puts 'Account already exists'
+        puts 'User already exists'
         
-        @mentor = mentor_account.user
+        @mentor = mentor_user.account
 
-        mentor_account.update(email: r[3], phone: r[5], name: r[1])
+        mentor_user.update(email: r[3], phone: r[5], name: r[1])
         
-        if mentor_account.save
+        if mentor_user.save
         else
-          puts mentor_account.errors
+          puts mentor_user.errors
         end
       end
 

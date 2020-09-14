@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :authenticate_account, only: %i[create index update destroy register unregister join export_registered export_joined]
+  before_action :authenticate_user, only: %i[create index update destroy register unregister join export_registered export_joined]
   before_action :set_event, only: [:update, :destroy, \
     :register, :unregister, :join, :public_register, :public_join, :export_registered, :export_joined]
 
@@ -10,10 +10,10 @@ class EventsController < ApplicationController
     @events = Event.all
     
     @events.each do |event|
-      event.current_account = current_account
+      event.current_user = current_user
     end
     
-    render(json: @events.to_json(methods: [:account_registration]), status: :ok)
+    render(json: @events.to_json(methods: [:user_registration]), status: :ok)
   end
 
   # POST /events
@@ -21,9 +21,21 @@ class EventsController < ApplicationController
     render(json: { message: 'You are not master' }, status: :unauthorized) unless is_master
 
     @event = Event.new(name: event_params[:name], kind: event_params[:kind])
-    @event.description = event_params[:description] if event_params[:description]
-    @event.link = event_params[:link] if event_params[:link]
-    @event.public_link = event_params[:public_link] if (event_params[:public_link] && event_params[:kind] == 'open')
+    @event.description = event_params[:description] if event_params[:description]if event_params[:link]
+    if event_params[:link]
+      if event_params[:link].start_with?("http://") || event_params[:link].start_with?("https://")
+        @event.link = event_params[:link]
+      else
+        @event.link = 'http://' + event_params[:link]
+      end
+    end
+    if event_params[:kind] == 'open' && event_params[:public_link]
+      if event_params[:public_link].start_with?("http://") || event_params[:public_link].start_with?("https://")
+        @event.public_link = event_params[:public_link]
+      else
+        @event.public_link = 'http://' + event_params[:public_link]
+      end
+    end
     @event.image_url = event_params[:image_url] if event_params[:image_url]
     @event.host = event_params[:host] if event_params[:host]
 
@@ -34,8 +46,8 @@ class EventsController < ApplicationController
 
       if @event.kind === 'invite-only' && event_params[:invites]
         event_params[:invitees].each do |email|
-          a = Account.find_or_create_by(email: email)
-          @event.invitations.create!(account: a)
+          user = User.find_or_create_by(email: email)
+          @event.invitations.create!(user: user)
         end
       end
 
@@ -52,8 +64,20 @@ class EventsController < ApplicationController
     @event.name = event_params[:name] if event_params[:name]
     @event.kind = event_params[:kind] if event_params[:kind]
     @event.description = event_params[:description] if event_params[:description]
-    @event.link = event_params[:link] if event_params[:link]
-    @event.public_link = event_params[:public_link] if (event_params[:public_link] && event_params[:kind] == 'open')
+    if event_params[:link]
+      if event_params[:link].start_with?("http://") || event_params[:link].start_with?("https://")
+        @event.link = event_params[:link]
+      else
+        @event.link = 'http://' + event_params[:link]
+      end
+    end
+    if event_params[:kind] == 'open' && event_params[:public_link]
+      if event_params[:public_link].start_with?("http://") || event_params[:public_link].start_with?("https://")
+        @event.public_link = event_params[:public_link]
+      else
+        @event.public_link = 'http://' + event_params[:public_link]
+      end
+    end
     @event.image_url = event_params[:image_url] if event_params[:image_url]
     @event.host = event_params[:host] if event_params[:host]
 
@@ -64,8 +88,8 @@ class EventsController < ApplicationController
 
       if @event.kind === 'invite-only' && event_params[:invites]
         event_params[:invitees].each do |email|
-          a = Account.find_or_create_by(email: email)
-          @event.invitations.create!(account: a)
+          user = User.find_or_create_by(email: email)
+          @event.invitations.create!(user: user)
         end
       end
 
@@ -92,14 +116,14 @@ class EventsController < ApplicationController
 
   # POST /events/:id/register
   def register
-    @registration = @event.registrations.find_or_create_by(account: current_account)
+    @registration = @event.registrations.find_or_create_by(user: current_user)
 
     @registration.registered = true
 
     if @registration.save
-      @event.current_account = current_account
+      @event.current_user = current_user
 
-      render(json: @event.to_json(methods: [:account_registration]), status: :created)
+      render(json: @event.to_json(methods: [:user_registration]), status: :created)
     else
       render(json: @registration.errors, status: :unprocessable_entity)
     end
@@ -107,14 +131,14 @@ class EventsController < ApplicationController
 
   # POST /events/:id/unregister
   def unregister
-    @registration = @event.registrations.find_or_create_by(account: current_account)
+    @registration = @event.registrations.find_or_create_by(user: current_user)
 
     @registration.registered = false
 
     if @registration.save
-      @event.current_account = current_account
+      @event.current_user = current_user
 
-      render(json: @event.to_json(methods: [:account_registration]), status: :created)
+      render(json: @event.to_json(methods: [:user_registration]), status: :created)
     else
       render(json: @registration.errors, status: :unprocessable_entity)
     end
@@ -137,14 +161,14 @@ class EventsController < ApplicationController
 
   # POST /events/:id/join
   def join
-    @registration = @event.registrations.find_or_create_by(account: current_account)
+    @registration = @event.registrations.find_or_create_by(user: current_user)
 
     @registration.joined = true
 
     if @registration.save
-      @event.current_account = current_account
+      @event.current_user = current_user
 
-      render(json: @event.to_json(methods: [:account_registration]), status: :created)
+      render(json: @event.to_json(methods: [:user_registration]), status: :created)
     else
       render(json: @registration.errors, status: :unprocessable_entity)
     end

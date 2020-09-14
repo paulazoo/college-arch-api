@@ -15,27 +15,6 @@ ActiveRecord::Schema.define(version: 2020_09_14_031251) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "accounts", force: :cascade do |t|
-    t.string "google_id"
-    t.string "name"
-    t.string "email"
-    t.string "image_url"
-    t.string "token"
-    t.string "display_name"
-    t.string "given_name"
-    t.string "family_name"
-    t.string "phone"
-    t.string "bio"
-    t.string "user_type"
-    t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "school"
-    t.integer "grad_year"
-    t.string "refresh_token_id"
-    t.index ["user_type", "user_id"], name: "index_accounts_on_user_type_and_user_id"
-  end
-
   create_table "events", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -51,12 +30,12 @@ ActiveRecord::Schema.define(version: 2020_09_14_031251) do
   end
 
   create_table "invitations", force: :cascade do |t|
-    t.bigint "account_id", null: false
+    t.bigint "user_id", null: false
     t.bigint "event_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["account_id"], name: "index_invitations_on_account_id"
     t.index ["event_id"], name: "index_invitations_on_event_id"
+    t.index ["user_id"], name: "index_invitations_on_user_id"
   end
 
   create_table "mentee_applicant_interests", force: :cascade do |t|
@@ -173,7 +152,7 @@ ActiveRecord::Schema.define(version: 2020_09_14_031251) do
   end
 
   create_table "registrations", force: :cascade do |t|
-    t.bigint "account_id"
+    t.bigint "user_id"
     t.bigint "event_id", null: false
     t.string "ip_address"
     t.string "public_name"
@@ -182,17 +161,38 @@ ActiveRecord::Schema.define(version: 2020_09_14_031251) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "registered", default: false
     t.boolean "joined", default: false
-    t.index ["account_id"], name: "index_registrations_on_account_id"
     t.index ["event_id"], name: "index_registrations_on_event_id"
+    t.index ["user_id"], name: "index_registrations_on_user_id"
   end
 
-  add_foreign_key "invitations", "accounts"
+  create_table "users", force: :cascade do |t|
+    t.string "google_id"
+    t.string "name"
+    t.string "email"
+    t.string "image_url"
+    t.string "token"
+    t.string "display_name"
+    t.string "given_name"
+    t.string "family_name"
+    t.string "phone"
+    t.string "bio"
+    t.string "account_type"
+    t.bigint "account_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "school"
+    t.integer "grad_year"
+    t.string "refresh_token_id"
+    t.index ["account_type", "account_id"], name: "index_users_on_account_type_and_account_id"
+  end
+
   add_foreign_key "invitations", "events"
+  add_foreign_key "invitations", "users"
   add_foreign_key "mentee_applicant_interests", "mentee_applicants"
   add_foreign_key "mentor_applicant_interests", "mentor_applicants"
   add_foreign_key "mentor_applicant_majors", "mentor_applicants"
   add_foreign_key "mentors_mentees", "mentees"
   add_foreign_key "mentors_mentees", "mentors"
-  add_foreign_key "registrations", "accounts"
   add_foreign_key "registrations", "events"
+  add_foreign_key "registrations", "users"
 end

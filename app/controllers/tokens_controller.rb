@@ -9,13 +9,13 @@ class TokensController < ApplicationController
     end
 
     if decoded_refresh_token && !decoded_refresh_token.empty?
-      account_id = decoded_refresh_token[0]['account_id']
-      @account = Account.find(account_id)
+      user_id = decoded_refresh_token[0]['user_id']
+      @user = User.find(user_id)
 
-      if @account.refresh_token_id == decoded_refresh_token[0]['id']
+      if @user.refresh_token_id == decoded_refresh_token[0]['id']
         render(json: {
           message: 'Token exchange successful',
-          access_token: encode_access_token({ account_id: @account.id }),
+          access_token: encode_access_token({ user_id: @user.id }),
         }, status: :created)
       else
         render(json: { message: 'Please login' }, status: :unauthorized)
