@@ -5,13 +5,13 @@ class CreateMenteeApplicants < ActiveRecord::Migration[6.0]
       t.timestamps
 
       t.string(:first_name)
-      t.string(:last_name)
+      t.string(:family_name)
       t.string(:school)
       t.integer(:us_citizen)
       t.string(:location)
       t.string(:phone)
       t.string(:email)
-      t.string(:grad_year)
+      t.integer(:grad_year)
       t.string(:essay)
 
       # ethnicity

@@ -1,7 +1,7 @@
 class Event < ApplicationRecord
   attr_accessor :current_account
 
-  enum kind: { open: 0, fellows_only: 2, invite_only: 2 }
+  enum kind: { open: 0, fellows_only: 1, invite_only: 2 }
   
   has_many :invitations, class_name: 'Invitation', foreign_key: 'event_id', dependent: :destroy
 

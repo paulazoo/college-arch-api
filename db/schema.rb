@@ -71,13 +71,13 @@ ActiveRecord::Schema.define(version: 2020_09_14_031251) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "first_name"
-    t.string "last_name"
+    t.string "family_name"
     t.string "school"
     t.integer "us_citizen"
     t.string "location"
     t.string "phone"
     t.string "email"
-    t.string "grad_year"
+    t.integer "grad_year"
     t.string "essay"
     t.boolean "hispanic", default: false
     t.boolean "native", default: false
@@ -115,19 +115,22 @@ ActiveRecord::Schema.define(version: 2020_09_14_031251) do
   create_table "mentor_applicant_majors", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "mentor_applicant_id", null: false
+    t.string "major"
+    t.index ["mentor_applicant_id"], name: "index_mentor_applicant_majors_on_mentor_applicant_id"
   end
 
   create_table "mentor_applicants", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "first_name"
-    t.string "last_name"
+    t.string "family_name"
     t.string "school"
     t.integer "us_citizen"
     t.string "location"
     t.string "phone"
     t.string "email"
-    t.string "grad_year"
+    t.integer "grad_year"
     t.string "essay"
     t.boolean "hispanic", default: false
     t.boolean "native", default: false
@@ -187,6 +190,7 @@ ActiveRecord::Schema.define(version: 2020_09_14_031251) do
   add_foreign_key "invitations", "events"
   add_foreign_key "mentee_applicant_interests", "mentee_applicants"
   add_foreign_key "mentor_applicant_interests", "mentor_applicants"
+  add_foreign_key "mentor_applicant_majors", "mentor_applicants"
   add_foreign_key "mentors_mentees", "mentees"
   add_foreign_key "mentors_mentees", "mentors"
   add_foreign_key "registrations", "accounts"
