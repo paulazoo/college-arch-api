@@ -1,4 +1,4 @@
-class AccountMailer < ApplicationMailer
+class UserMailer < ApplicationMailer
   default from: ENV['GMAIL_USERNAME']
  
   def welcome_email(email_address)

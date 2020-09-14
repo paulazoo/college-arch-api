@@ -1,5 +1,5 @@
 class Event < ApplicationRecord
-  attr_accessor :current_account
+  attr_accessor :current_user
 
   enum kind: { open: 0, fellows_only: 1, invite_only: 2 }
   
@@ -9,9 +9,9 @@ class Event < ApplicationRecord
 
   validates_presence_of :name
 
-  def account_registration(account = nil)
-    account ||= current_account
-    @account_registration = registrations.where(account: account).first
+  def user_registration(user = nil)
+    user ||= current_user
+    @user_registration = registrations.where(user: user).first
   end
 
 end

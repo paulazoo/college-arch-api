@@ -1,19 +1,19 @@
 Rails.application.routes.draw do
-  post 'google_login' => 'accounts#google_login'
+  post 'google_login' => 'users#google_login'
   post 'tokens/refresh' => 'tokens#refresh'
 
-  put 'accounts/master_update' => 'accounts#master_update'
+  put 'users/master_update' => 'users#master_update'
 
   resources :mentee_applicants, only: %i[index create]
   
   resources :mentor_applicants, only: %i[index create]
 
-  resources :accounts, only: [] do
+  resources :users, only: [] do
     get 'events', on: :member
     post 'mail', on: :member
   end
 
-  resources :accounts, only: %i[show update index]
+  resources :users, only: %i[show update index]
 
   post 'mentors/batch' => 'mentors#batch'
   post 'mentors/master' => 'mentors#master'

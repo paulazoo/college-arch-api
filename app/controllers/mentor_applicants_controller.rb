@@ -1,5 +1,5 @@
 class MentorApplicantsController < ApplicationController
-  before_action :authenticate_account, only: %i[index]
+  before_action :authenticate_user, only: %i[index]
 
   # GET /mentor_applicants
   def index

@@ -1,11 +1,11 @@
 class MentorsController < ApplicationController
-  before_action :authenticate_account, only: %i[create index batch]
+  before_action :authenticate_user, only: %i[create index batch]
 
-  # GET menters
+  # GET /mentors
   def index
     if is_master
       @mentors = Mentor.all
-      json_response(@mentors)
+      render(json: @mentors, status: :ok)
     else
       render(json: { message: 'You are not master' }, status: :unauthorized)
     end
@@ -15,22 +15,22 @@ class MentorsController < ApplicationController
   def create
     render(json: { message: 'You are not master' }, status: :unauthorized) if !is_master
 
-    @account = Account.find_by(email: mentor_params[:email])
+    @user = User.find_by(email: mentor_params[:email])
 
-    if @account.blank?
+    if @user.blank?
       @mentor = Mentor.new()
 
-      @mentor.account = Account.new(user: @mentor, email: mentor_params[:email])
+      @mentor.user = User.new(account: @mentor, email: mentor_params[:email])
 
       if @mentor.save
         Analytics.identify(
-          user_id: @mentor.account.id.to_s,
+          user_id: @mentor.user.id.to_s,
           traits: {
             role: 'Mentor',
-            account_id: @mentor.account.id.to_s,
-            email: @mentor.account.email.to_s,
-            name: @mentor.account.name.to_s,
-            google_id: @mentor.account.google_id.to_s,
+            user_id: @mentor.user.id.to_s,
+            email: @mentor.user.email.to_s,
+            name: @mentor.user.name.to_s,
+            google_id: @mentor.user.google_id.to_s,
           },
         )
 
@@ -40,7 +40,7 @@ class MentorsController < ApplicationController
       end
 
     else
-      render(json: { message: 'Account already exists!' })
+      render(json: { message: 'User already exists!' })
     end
   end
 
@@ -48,22 +48,22 @@ class MentorsController < ApplicationController
   def master
     render(json: { message: 'Wrong master creation password' }, status: :unauthorized) if mentor_params[:master_creation_password] != 'college_arch_master_creation_password'
 
-    @account = Account.find_by(email: mentor_params[:email])
+    @user = User.find_by(email: mentor_params[:email])
 
-    if @account.blank?
+    if @user.blank?
       @mentor = Mentor.new()
 
-      @mentor.account = Account.new(user: @mentor, email: mentor_params[:email])
+      @mentor.user = User.new(account: @mentor, email: mentor_params[:email])
 
       if @mentor.save
         Analytics.identify(
-          user_id: @mentor.account.id.to_s,
+          user_id: @mentor.user.id.to_s,
           traits: {
             role: 'Mentor',
-            account_id: @mentor.account.id.to_s,
-            email: @mentor.account.email.to_s,
-            name: @mentor.account.name.to_s,
-            google_id: @mentor.account.google_id.to_s,
+            user_id: @mentor.user.id.to_s,
+            email: @mentor.user.email.to_s,
+            name: @mentor.user.name.to_s,
+            google_id: @mentor.user.google_id.to_s,
           },
         )
 
@@ -73,7 +73,7 @@ class MentorsController < ApplicationController
       end
 
     else
-      render(json: { message: 'Account already exists!' })
+      render(json: { message: 'User already exists!' })
     end
   end
 
@@ -86,19 +86,19 @@ class MentorsController < ApplicationController
     finished_mentors = []
 
     parsed_emails.each do |email|
-      @account = Account.find_by(email: email)
+      @user = User.find_by(email: email)
 
-      if @account.blank?
+      if @user.blank?
         @mentor = Mentee.new()
 
-        @mentor.account = Account.new(user: @mentor, email: email)
+        @mentor.user = User.new(account: @mentor, email: email)
 
         if @mentor.save
           Analytics.identify(
-            user_id: @mentor.account.id.to_s,
+            user_id: @mentor.user.id.to_s,
             traits: {
               role: 'Mentee',
-              account_id: @mentor.account.id.to_s,
+              user_id: @mentor.user.id.to_s,
               email: email,
             },
           )
@@ -109,7 +109,7 @@ class MentorsController < ApplicationController
         end
 
       else
-        puts 'Account already exists'
+        puts 'User already exists'
       end
     end
 

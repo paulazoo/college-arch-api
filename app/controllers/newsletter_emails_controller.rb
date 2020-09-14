@@ -1,5 +1,5 @@
 class NewsletterEmailsController < ApplicationController
-  before_action :authenticate_account, only: %i[index]
+  before_action :authenticate_user, only: %i[index]
 
   # GET /newsletter_emails
   def index
