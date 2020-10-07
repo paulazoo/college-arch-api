@@ -10,7 +10,6 @@ Rails.application.routes.draw do
 
   resources :users, only: [] do
     get 'events', on: :member
-    post 'mail', on: :member
   end
 
   resources :users, only: %i[show update index]
@@ -49,5 +48,6 @@ Rails.application.routes.draw do
   post 'google_sheets/export_joined' => 'google_sheets#export_joined'
 
   post 'emails/mail' => 'emails#mail'
+  post 'emails/event_reminder' => 'emails#event_reminder'
 
 end

@@ -3,25 +3,30 @@
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
     <style>
-    .click-button:hover { 
-      background-color: #011E41 !important; 
-      
-      }
+    .click-button:hover { background-color: #011E41 !important; }
     </style>
   </head>
   <body>
-    <h1>Welcome to College ARCH (Application Resources for College and Higher-education)!</h1>
+    <h1>College ARCH Event Reminder: <%= @event_name %></h1>
     <p>
-      Hi there,
+      Hi <%= @name %>,
       <br>
-      You have successfully set up your user at collegearch.org.
       <br>
-      To login to the site, click here: 
+      You're registered for the following College ARCH event:
       <br>
-      <a href=<%= @url %>>
+        Event Name: <b><%= @event_name %></b>
+      <br>
+        Start Time: <b><%= @start_time %></b>
+      <br>
+        End Time: <b><%= @end_time %></b>
+      <br>
+      <br>
+        To join the event click here:
+      <br>
+      <a href=<%= @join_link %>>
         <button type="button"
-        class='click-button'
-        style="background-color:#024597;
+        class="click-button"
+        style="background-color:hsl(213, 97%, 30%);
         border:none;
         color:white;
         margin: 5px;
@@ -32,15 +37,15 @@
         font-size:16px;
         border-radius:8px;"
         role="button">
-          LOGIN
+          JOIN EVENT
         </button>
       </a>
       <br>
-      Thanks for joining and have a great day! 😊
+      <br>
+      Looking forward to seeing you there and we hope you have an AWESOME day today!!! 💗
+      <br>
+      -The College ARCH Team 😁
     </p>
-    <%# <div style="background-color:lightblue">
-      <p style="color:green">yoyoyo my name is paula zhu and this is some nice html</p>
-    </div> %>
     <footer>
       <br/>
       <br/>
