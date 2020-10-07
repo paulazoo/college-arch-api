@@ -26,7 +26,7 @@
 /config/local_env.yml
 
 # Ignore Google API Service Account client secret key
-client-secret.json
+client_secret.json
 
 /public/packs
 /public/packs-test
