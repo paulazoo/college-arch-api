@@ -1,3 +1,3 @@
 class MenteeApplicantInterest < ApplicationRecord
-  belongs_to :mentee_applicant
+  # belongs_to :mentee_applicant
 end
