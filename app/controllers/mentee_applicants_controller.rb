@@ -19,8 +19,8 @@ class MenteeApplicantsController < ApplicationController
     @mentee_applicant.family_name = mentee_applicant_params[:family_name] if mentee_applicant_params[:family_name]
     @mentee_applicant.city = mentee_applicant_params[:city] if mentee_applicant_params[:city]
     @mentee_applicant.us_living = mentee_applicant_params[:us_living] if mentee_applicant_params[:us_living]
-    @mentee_applicant.state = mentee_applicant_params[:state] if mentee_applicant_params[:us_living] == true 
-    @mentee_applicant.country = mentee_applicant_params[:country] if mentee_applicant_params[:us_living] == false
+    @mentee_applicant.location = mentee_applicant_params[:state] if mentee_applicant_params[:us_living] == true 
+    @mentee_applicant.location = mentee_applicant_params[:country] if mentee_applicant_params[:us_living] == false
     @mentee_applicant.school = mentee_applicant_params[:school] if mentee_applicant_params[:school]
     @mentee_applicant.essay = mentee_applicant_params[:essay] if mentee_applicant_params[:essay]
     
@@ -33,10 +33,10 @@ class MenteeApplicantsController < ApplicationController
     @mentee_applicant.lgbt = mentee_applicant_params[:lgbt] if mentee_applicant_params[:lgbt]
     @mentee_applicant.black = mentee_applicant_params[:black] if mentee_applicant_params[:black]
     @mentee_applicant.hispanic = mentee_applicant_params[:hispanic] if mentee_applicant_params[:hispanic]
-    @mentee_applicant.asian = mentee_applicant_params[:asian_pi] if mentee_applicant_params[:asian_pi]
-    @mentee_applicant.asian = mentee_applicant_params[:me_na] if mentee_applicant_params[:me_na]
+    @mentee_applicant.asian_pi = mentee_applicant_params[:asian_pi] if mentee_applicant_params[:asian_pi]
+    @mentee_applicant.me_na = mentee_applicant_params[:me_na] if mentee_applicant_params[:me_na]
     @mentee_applicant.native = mentee_applicant_params[:native] if mentee_applicant_params[:native]
-    @mentee_applicant.native = mentee_applicant_params[:immigrant] if mentee_applicant_params[:immigrant]
+    @mentee_applicant.immigrant = mentee_applicant_params[:immigrant] if mentee_applicant_params[:immigrant]
 
     if @mentee_applicant.save
       render(json: @mentee_applicant, status: :created)
@@ -47,13 +47,14 @@ class MenteeApplicantsController < ApplicationController
 
   private
 
-  def set_mentor_applicant
-    @mentor_applicant = MentorApplicant.find(params[:mentor_applicant_id])
+  def set_mentee_applicant
+    @mentee_applicant = MenteeApplicant.find(params[:mentee_applicant_id])
   end
 
-  def mentor_applicant_params
-    params.permit([:email, :first_name, :last_name, \
-      :state, :counry, :us_living, :city, \
+  def mentee_applicant_params
+    params.permit([:mentee_applicant_id, \
+      :email, :first_name, :last_name, \
+      :state, :country, :us_living, :city, \
       :school, :essay, \
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
       :black, :hispanic, :asian_pi, :me_na, :native, :immigrant ])

@@ -1,13 +1,17 @@
 Rails.application.routes.draw do
+  # authentication and login
   post 'google_login' => 'users#google_login'
   post 'tokens/refresh' => 'tokens#refresh'
 
+  # master
   put 'users/master_update' => 'users#master_update'
 
+  # applications
   resources :mentee_applicants, only: %i[index create]
   
   resources :mentor_applicants, only: %i[index create]
 
+  # rest api
   resources :users, only: [] do
     get 'events', on: :member
   end
