@@ -33,7 +33,8 @@ class MenteeApplicantsController < ApplicationController
     @mentee_applicant.lgbt = mentee_applicant_params[:lgbt] if mentee_applicant_params[:lgbt]
     @mentee_applicant.black = mentee_applicant_params[:black] if mentee_applicant_params[:black]
     @mentee_applicant.hispanic = mentee_applicant_params[:hispanic] if mentee_applicant_params[:hispanic]
-    @mentee_applicant.asian = mentee_applicant_params[:asian] if mentee_applicant_params[:asian]
+    @mentee_applicant.asian = mentee_applicant_params[:asian_pi] if mentee_applicant_params[:asian_pi]
+    @mentee_applicant.asian = mentee_applicant_params[:me_na] if mentee_applicant_params[:me_na]
     @mentee_applicant.native = mentee_applicant_params[:native] if mentee_applicant_params[:native]
     @mentee_applicant.native = mentee_applicant_params[:immigrant] if mentee_applicant_params[:immigrant]
 
@@ -54,6 +55,7 @@ class MenteeApplicantsController < ApplicationController
     params.permit([:email, :first_name, :last_name, \
       :state, :counry, :us_living, :city, \
       :school, :essay, \
-      :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, :black, :hispanic, :asian, :native, :immigrant ])
+      :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
+      :black, :hispanic, :asian_pi, :me_na, :native, :immigrant ])
   end
 end
