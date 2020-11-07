@@ -13,9 +13,31 @@ class MentorApplicantsController < ApplicationController
 
   # POST /mentor_applicants
   def create
-    @mentor_applicant = MentorApplicant.find_or_create_by(email: mentor_applicant_params[:email])
+    @mentor_applicant = MentorApplicant.new(email: mentor_applicant_params[:email])
+
+    @mentor_applicant.first_name = mentor_applicant_params[:first_name] if mentor_applicant_params[:first_name]
+    @mentor_applicant.family_name = mentor_applicant_params[:family_name] if mentor_applicant_params[:family_name]
+    @mentor_applicant.city = mentor_applicant_params[:city] if mentor_applicant_params[:city]
+    @mentor_applicant.us_living = mentor_applicant_params[:us_living] if mentor_applicant_params[:us_living]
+    @mentor_applicant.location = mentor_applicant_params[:state] if mentor_applicant_params[:us_living] == true 
+    @mentor_applicant.location = mentor_applicant_params[:country] if mentor_applicant_params[:us_living] == false
+    @mentor_applicant.school = mentor_applicant_params[:school] if mentor_applicant_params[:school]
+    @mentor_applicant.essay = mentor_applicant_params[:essay] if mentor_applicant_params[:essay]
     
-    # TODO finish other applicant attributes and add to allowed params
+    # backgrounds
+    @mentor_applicant.first_gen = mentor_applicant_params[:first_gen] if mentor_applicant_params[:first_gen]
+    @mentor_applicant.low_income = mentor_applicant_params[:low_income] if mentor_applicant_params[:low_income]
+    @mentor_applicant.stem_girl = mentor_applicant_params[:stem_girl] if mentor_applicant_params[:stem_girl]
+    @mentor_applicant.single_parent = mentor_applicant_params[:single_parent] if mentor_applicant_params[:single_parent]
+    @mentor_applicant.disabled = mentor_applicant_params[:disabled] if mentor_applicant_params[:disabled]
+    @mentor_applicant.lgbt = mentor_applicant_params[:lgbt] if mentor_applicant_params[:lgbt]
+    @mentor_applicant.black = mentor_applicant_params[:black] if mentor_applicant_params[:black]
+    @mentor_applicant.hispanic = mentor_applicant_params[:hispanic] if mentor_applicant_params[:hispanic]
+    @mentor_applicant.asian_pi = mentor_applicant_params[:asian_pi] if mentor_applicant_params[:asian_pi]
+    @mentor_applicant.me_na = mentor_applicant_params[:me_na] if mentor_applicant_params[:me_na]
+    @mentor_applicant.native = mentor_applicant_params[:native] if mentor_applicant_params[:native]
+    @mentor_applicant.immigrant = mentor_applicant_params[:immigrant] if mentor_applicant_params[:immigrant]
+    @mentor_applicant.grad_year = mentor_applicant_params[:grad_year] if mentor_applicant_params[:grad_year]
 
     if @mentor_applicant.save
       render(json: @mentor_applicant, status: :created)
@@ -31,6 +53,11 @@ class MentorApplicantsController < ApplicationController
   end
 
   def mentor_applicant_params
-    params.permit([:email])
+    params.permit([:mentor_applicant_id, \
+      :email, :first_name, :family_name, :grad_year, \
+      :state, :country, :us_living, :city, \
+      :school, :essay, \
+      :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
+      :black, :hispanic, :asian_pi, :me_na, :native, :immigrant ])
   end
 end

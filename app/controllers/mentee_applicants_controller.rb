@@ -13,7 +13,7 @@ class MenteeApplicantsController < ApplicationController
 
   # POST /mentee_applicants
   def create
-    @mentee_applicant = MenteeApplicant.find_or_create_by(email: mentee_applicant_params[:email])
+    @mentee_applicant = MenteeApplicant.new(email: mentee_applicant_params[:email])
 
     @mentee_applicant.first_name = mentee_applicant_params[:first_name] if mentee_applicant_params[:first_name]
     @mentee_applicant.family_name = mentee_applicant_params[:family_name] if mentee_applicant_params[:family_name]
@@ -37,6 +37,7 @@ class MenteeApplicantsController < ApplicationController
     @mentee_applicant.me_na = mentee_applicant_params[:me_na] if mentee_applicant_params[:me_na]
     @mentee_applicant.native = mentee_applicant_params[:native] if mentee_applicant_params[:native]
     @mentee_applicant.immigrant = mentee_applicant_params[:immigrant] if mentee_applicant_params[:immigrant]
+    @mentee_applicant.grad_year = mentee_applicant_params[:grad_year] if mentee_applicant_params[:grad_year]
 
     if @mentee_applicant.save
       render(json: @mentee_applicant, status: :created)
@@ -53,7 +54,7 @@ class MenteeApplicantsController < ApplicationController
 
   def mentee_applicant_params
     params.permit([:mentee_applicant_id, \
-      :email, :first_name, :last_name, \
+      :email, :first_name, :family_name, :grad_year, \
       :state, :country, :us_living, :city, \
       :school, :essay, \
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \

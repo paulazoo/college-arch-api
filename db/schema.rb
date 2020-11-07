@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_05_234947) do
+ActiveRecord::Schema.define(version: 2020_11_07_223430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,6 +134,12 @@ ActiveRecord::Schema.define(version: 2020_11_05_234947) do
     t.boolean "first_gen", default: false
     t.boolean "stem_girl", default: false
     t.boolean "immigrant", default: false
+    t.boolean "single_parent", default: false
+    t.boolean "disabled", default: false
+    t.boolean "lgbt", default: false
+    t.boolean "me_na", default: false
+    t.boolean "us_living", default: true
+    t.string "city"
   end
 
   create_table "mentors", force: :cascade do |t|
