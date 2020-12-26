@@ -52,6 +52,7 @@ class MenteeApplicantsController < ApplicationController
     @mentee_applicant.me_na = mentee_applicant_params[:me_na] if mentee_applicant_params[:me_na]
     @mentee_applicant.native = mentee_applicant_params[:native] if mentee_applicant_params[:native]
     @mentee_applicant.immigrant = mentee_applicant_params[:immigrant] if mentee_applicant_params[:immigrant]
+    @mentee_applicant.undoc = mentee_applicant_params[:undoc] if mentee_applicant_params[:undoc]
     @mentee_applicant.grad_year = mentee_applicant_params[:grad_year] if mentee_applicant_params[:grad_year]
 
     if @mentee_applicant.save
@@ -73,6 +74,6 @@ class MenteeApplicantsController < ApplicationController
       :state, :country, :us_living, :city, \
       :school, :essay, \
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
-      :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant ])
+      :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc ])
   end
 end

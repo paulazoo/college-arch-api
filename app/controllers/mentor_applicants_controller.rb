@@ -52,6 +52,7 @@ class MentorApplicantsController < ApplicationController
     @mentor_applicant.me_na = mentor_applicant_params[:me_na] if mentor_applicant_params[:me_na]
     @mentor_applicant.native = mentor_applicant_params[:native] if mentor_applicant_params[:native]
     @mentor_applicant.immigrant = mentor_applicant_params[:immigrant] if mentor_applicant_params[:immigrant]
+    @mentor_applicant.undoc = mentor_applicant_params[:undoc] if mentor_applicant_params[:undoc]
     @mentor_applicant.grad_year = mentor_applicant_params[:grad_year] if mentor_applicant_params[:grad_year]
 
     if @mentor_applicant.save
@@ -73,6 +74,6 @@ class MentorApplicantsController < ApplicationController
       :state, :country, :us_living, :city, \
       :school, :essay, \
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
-      :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant ])
+      :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc ])
   end
 end
