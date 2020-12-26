@@ -33,7 +33,8 @@ class MentorApplicantsController < ApplicationController
     @mentor_applicant.lgbt = mentor_applicant_params[:lgbt] if mentor_applicant_params[:lgbt]
     @mentor_applicant.black = mentor_applicant_params[:black] if mentor_applicant_params[:black]
     @mentor_applicant.hispanic = mentor_applicant_params[:hispanic] if mentor_applicant_params[:hispanic]
-    @mentor_applicant.asian_pi = mentor_applicant_params[:asian_pi] if mentor_applicant_params[:asian_pi]
+    @mentor_applicant.asian = mentor_applicant_params[:asian] if mentor_applicant_params[:asian]
+    @mentor_applicant.pi = mentor_applicant_params[:pi] if mentor_applicant_params[:pi]
     @mentor_applicant.me_na = mentor_applicant_params[:me_na] if mentor_applicant_params[:me_na]
     @mentor_applicant.native = mentor_applicant_params[:native] if mentor_applicant_params[:native]
     @mentor_applicant.immigrant = mentor_applicant_params[:immigrant] if mentor_applicant_params[:immigrant]
@@ -58,6 +59,6 @@ class MentorApplicantsController < ApplicationController
       :state, :country, :us_living, :city, \
       :school, :essay, \
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
-      :black, :hispanic, :asian_pi, :me_na, :native, :immigrant ])
+      :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant ])
   end
 end
