@@ -13,6 +13,20 @@ class MentorApplicantsController < ApplicationController
 
   # POST /mentor_applicants
   def create
+    require 'net/http'
+    require 'uri'
+    # Send to Slack
+    uri = URI("https://hooks.slack.com/services/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")
+    header = { "Content-Type" => "application/json" }
+
+    incoming_app_notif = { "text" => \
+                          "\n Application: Mentor" + \
+                          "\n Name: " + mentor_applicant_params[:first_name] + " " +mentor_applicant_params[:family_name] + \
+                          "\n Email: " + mentor_applicant_params[:email]
+                        }
+    request = Net::HTTP.post(uri, incoming_app_notif.to_json, header)
+
+
     @mentor_applicant = MentorApplicant.new(email: mentor_applicant_params[:email])
 
     @mentor_applicant.first_name = mentor_applicant_params[:first_name] if mentor_applicant_params[:first_name]
