@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_26_170124) do
+ActiveRecord::Schema.define(version: 2021_04_04_054624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,8 @@ ActiveRecord::Schema.define(version: 2020_12_26_170124) do
     t.string "city"
     t.boolean "pi", default: false
     t.boolean "undoc", default: false
+    t.string "applicant_password"
+    t.integer "applicant_status", default: 0
   end
 
   create_table "mentees", force: :cascade do |t|
@@ -144,6 +146,8 @@ ActiveRecord::Schema.define(version: 2020_12_26_170124) do
     t.string "city"
     t.boolean "pi", default: false
     t.boolean "undoc", default: false
+    t.string "applicant_password"
+    t.integer "applicant_status", default: 0
   end
 
   create_table "mentors", force: :cascade do |t|

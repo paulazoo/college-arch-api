@@ -1,14 +1,13 @@
 class MenteeApplicantsController < ApplicationController
-  before_action :authenticate_user, only: %i[index]
+  before_action :authenticate_user, only: %i[index show update]
+  before_action :set_mentee_applicant, only: %i[show update]
 
   # GET /mentee_applicants
   def index
-    if is_master
-      @mentee_applicants = MenteeApplicant.all
-      render(json: @mentee_applicants, status: :ok)
-    else
-      render(json: { message: 'You are not master' }, status: :unauthorized)
-    end
+    return render(json: { message: 'You are not master' }, status: :unauthorized) unless is_master
+
+    @mentee_applicants = MenteeApplicant.all
+    render(json: @mentee_applicants, status: :ok)
   end
 
   # POST /mentee_applicants
@@ -28,6 +27,7 @@ class MenteeApplicantsController < ApplicationController
     
 
     @mentee_applicant = MenteeApplicant.new(email: mentee_applicant_params[:email])
+    @mentee_applicant.applicant_password = mentee_applicant_params[:applicant_password] if mentee_applicant_params[:applicant_password]
 
     @mentee_applicant.first_name = mentee_applicant_params[:first_name] if mentee_applicant_params[:first_name]
     @mentee_applicant.family_name = mentee_applicant_params[:family_name] if mentee_applicant_params[:family_name]
@@ -62,10 +62,32 @@ class MenteeApplicantsController < ApplicationController
     end
   end
 
+  # GET /mentee_applicants/:id
+  def show
+    render(json: { errors: 'Not the correct applicant!' }, status: :unauthorized) if (mentee_applicant_params[:applicant_password] != @mentee_applicant.applicant_password && !is_master)
+
+    render(json: @mentee_applicant.to_json(include: []), status: :ok)
+      # :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
+      # :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc]), status: :ok)
+  end
+
+  # PUT /mentee_applicants/:id
+  def update
+    return render(json: { message: 'You are not master' }, status: :unauthorized) unless is_master
+
+    @mentee_applicant.applicant_status = mentee_applicant_params[:applicant_status]
+
+    if @mentee_applicant.save
+      render(json: @mentee_applicant.to_json(include: []), status: :ok)
+    else
+      render(json: @mentee_applicant.to_json(include: []), status: :ok)
+    end
+  end
+
   private
 
   def set_mentee_applicant
-    @mentee_applicant = MenteeApplicant.find(params[:mentee_applicant_id])
+    @mentee_applicant = MenteeApplicant.find(params[:id])
   end
 
   def mentee_applicant_params
@@ -74,6 +96,7 @@ class MenteeApplicantsController < ApplicationController
       :state, :country, :us_living, :city, \
       :school, :essay, \
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
-      :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc ])
+      :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc, \
+      :applicant_password, :applicant_status ])
   end
 end

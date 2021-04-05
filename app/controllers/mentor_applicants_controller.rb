@@ -1,5 +1,6 @@
 class MentorApplicantsController < ApplicationController
-  before_action :authenticate_user, only: %i[index]
+  before_action :authenticate_user, only: %i[index show update]
+  before_action :set_mentor_applicant, only: %i[show update]
 
   # GET /mentor_applicants
   def index
@@ -28,6 +29,7 @@ class MentorApplicantsController < ApplicationController
 
 
     @mentor_applicant = MentorApplicant.new(email: mentor_applicant_params[:email])
+    @mentor_applicant.applicant_password = mentor_applicant_params[:applicant_password] if mentor_applicant_params[:applicant_password]
 
     @mentor_applicant.first_name = mentor_applicant_params[:first_name] if mentor_applicant_params[:first_name]
     @mentor_applicant.family_name = mentor_applicant_params[:family_name] if mentor_applicant_params[:family_name]
@@ -62,10 +64,30 @@ class MentorApplicantsController < ApplicationController
     end
   end
 
+  # GET /mentor_applicants/:id
+  def show
+    render(json: { errors: 'Not the correct applicant!' }, status: :unauthorized) if (mentor_applicant_params[:applicant_password] != @mentor_applicant.applicant_password && !is_master)
+
+    render(json: @mentor_applicant.to_json(include: []), status: :ok)
+  end
+
+  # PUT /mentor_applicants/:id
+  def update
+    return render(json: { message: 'You are not master' }, status: :unauthorized) unless is_master
+
+    @mentor_applicant.applicant_status = mentor_applicant_params[:applicant_status]
+    
+    if @mentor_applicant.save
+      render(json: @mentor_applicant.to_json(include: []), status: :ok)
+    else
+      render(json: @mentor_applicant.errors, status: :unprocessable_entity)
+    end
+  end
+
   private
 
   def set_mentor_applicant
-    @mentor_applicant = MentorApplicant.find(params[:mentor_applicant_id])
+    @mentor_applicant = MentorApplicant.find(params[:id])
   end
 
   def mentor_applicant_params
@@ -74,6 +96,7 @@ class MentorApplicantsController < ApplicationController
       :state, :country, :us_living, :city, \
       :school, :essay, \
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
-      :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc ])
+      :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc, \
+      :password ])
   end
 end
