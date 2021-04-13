@@ -29,6 +29,7 @@ class MenteeApplicantsController < ApplicationController
     @mentee_applicant = MenteeApplicant.new(email: mentee_applicant_params[:email])
     @mentee_applicant.applicant_password = mentee_applicant_params[:applicant_password] if mentee_applicant_params[:applicant_password]
 
+    @mentee_applicant.phone = mentee_applicant_params[:phone] if mentee_applicant_params[:phone]
     @mentee_applicant.first_name = mentee_applicant_params[:first_name] if mentee_applicant_params[:first_name]
     @mentee_applicant.family_name = mentee_applicant_params[:family_name] if mentee_applicant_params[:family_name]
     @mentee_applicant.city = mentee_applicant_params[:city] if mentee_applicant_params[:city]
@@ -92,7 +93,7 @@ class MenteeApplicantsController < ApplicationController
 
   def mentee_applicant_params
     params.permit([:mentee_applicant_id, \
-      :email, :first_name, :family_name, :grad_year, \
+      :email, :phone, :first_name, :family_name, :grad_year, \
       :state, :country, :us_living, :city, \
       :school, :essay, \
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \

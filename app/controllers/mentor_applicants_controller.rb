@@ -31,6 +31,7 @@ class MentorApplicantsController < ApplicationController
     @mentor_applicant = MentorApplicant.new(email: mentor_applicant_params[:email])
     @mentor_applicant.applicant_password = mentor_applicant_params[:applicant_password] if mentor_applicant_params[:applicant_password]
 
+    @mentor_applicant.phone = mentor_applicant_params[:phone] if mentor_applicant_params[:phone]
     @mentor_applicant.first_name = mentor_applicant_params[:first_name] if mentor_applicant_params[:first_name]
     @mentor_applicant.family_name = mentor_applicant_params[:family_name] if mentor_applicant_params[:family_name]
     @mentor_applicant.city = mentor_applicant_params[:city] if mentor_applicant_params[:city]
@@ -92,7 +93,7 @@ class MentorApplicantsController < ApplicationController
 
   def mentor_applicant_params
     params.permit([:mentor_applicant_id, \
-      :email, :first_name, :family_name, :grad_year, \
+      :email, :phone, :first_name, :family_name, :grad_year, \
       :state, :country, :us_living, :city, \
       :school, :essay, \
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
