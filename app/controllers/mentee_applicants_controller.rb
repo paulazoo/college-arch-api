@@ -38,7 +38,9 @@ class MenteeApplicantsController < ApplicationController
     @mentee_applicant.location = mentee_applicant_params[:country] if mentee_applicant_params[:us_living] == false
     @mentee_applicant.school = mentee_applicant_params[:school] if mentee_applicant_params[:school]
     @mentee_applicant.essay = mentee_applicant_params[:essay] if mentee_applicant_params[:essay]
-    
+    @mentee_applicant.hobby = mentee_applicant_params[:hobby] if mentee_applicant[:hobby]
+    @mentee_applicant.extra_component = mentee_applicant_params[:extra_component] if mentee_applicant_params[:extra_component]
+
     # backgrounds
     @mentee_applicant.first_gen = mentee_applicant_params[:first_gen] if mentee_applicant_params[:first_gen]
     @mentee_applicant.low_income = mentee_applicant_params[:low_income] if mentee_applicant_params[:low_income]
@@ -98,6 +100,7 @@ class MenteeApplicantsController < ApplicationController
       :school, :essay, \
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
       :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc, \
+      :hobby, :extra_component, \
       :applicant_password, :applicant_status ])
   end
 end

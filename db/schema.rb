@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_04_054624) do
+ActiveRecord::Schema.define(version: 2021_05_09_070143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,8 @@ ActiveRecord::Schema.define(version: 2021_04_04_054624) do
     t.boolean "undoc", default: false
     t.string "applicant_password"
     t.integer "applicant_status", default: 0
+    t.string "hobby"
+    t.string "extra_component"
   end
 
   create_table "mentees", force: :cascade do |t|
@@ -148,6 +150,8 @@ ActiveRecord::Schema.define(version: 2021_04_04_054624) do
     t.boolean "undoc", default: false
     t.string "applicant_password"
     t.integer "applicant_status", default: 0
+    t.string "hobby"
+    t.string "extra_component"
   end
 
   create_table "mentors", force: :cascade do |t|
