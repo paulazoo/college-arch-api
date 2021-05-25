@@ -38,7 +38,7 @@ class MenteeApplicantsController < ApplicationController
     @mentee_applicant.location = mentee_applicant_params[:country] if mentee_applicant_params[:us_living] == false
     @mentee_applicant.school = mentee_applicant_params[:school] if mentee_applicant_params[:school]
     @mentee_applicant.essay = mentee_applicant_params[:essay] if mentee_applicant_params[:essay]
-    @mentee_applicant.hobby = mentee_applicant_params[:hobby] if mentee_applicant[:hobby]
+    @mentee_applicant.hobby = mentee_applicant_params[:hobby] if mentee_applicant_params[:hobby]
     @mentee_applicant.extra_component = mentee_applicant_params[:extra_component] if mentee_applicant_params[:extra_component]
 
     # backgrounds
