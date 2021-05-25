@@ -40,8 +40,8 @@ class MentorApplicantsController < ApplicationController
     @mentor_applicant.location = mentor_applicant_params[:country] if mentor_applicant_params[:us_living] == false
     @mentor_applicant.school = mentor_applicant_params[:school] if mentor_applicant_params[:school]
     @mentor_applicant.essay = mentor_applicant_params[:essay] if mentor_applicant_params[:essay]
-    @mentor_applicant.hobby = mentor_applicant_params[:hobby] if mentor_applicant[:hobby]
-    @mentor_applicant.extra_component = mentor_applicant_params[:extra_component] if mentor_applicant[:extra_component]
+    @mentor_applicant.hobby = mentor_applicant_params[:hobby] if mentor_applicant_params[:hobby]
+    @mentor_applicant.extra_component = mentor_applicant_params[:extra_component] if mentor_applicant_params[:extra_component]
 
     # backgrounds
     @mentor_applicant.first_gen = mentor_applicant_params[:first_gen] if mentor_applicant_params[:first_gen]
