@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_09_070143) do
+ActiveRecord::Schema.define(version: 2021_06_25_190701) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,14 +36,6 @@ ActiveRecord::Schema.define(version: 2021_05_09_070143) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["event_id"], name: "index_invitations_on_event_id"
     t.index ["user_id"], name: "index_invitations_on_user_id"
-  end
-
-  create_table "mentee_applicant_interests", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "mentee_applicant_id", null: false
-    t.string "interest"
-    t.index ["mentee_applicant_id"], name: "index_mentee_applicant_interests_on_mentee_applicant_id"
   end
 
   create_table "mentee_applicants", force: :cascade do |t|
@@ -87,20 +79,13 @@ ActiveRecord::Schema.define(version: 2021_05_09_070143) do
     t.integer "applicant_status", default: 0
     t.string "hobby"
     t.string "extra_component"
+    t.string "interests"
   end
 
   create_table "mentees", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "classroom"
-  end
-
-  create_table "mentor_applicant_interests", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "mentor_applicant_id", null: false
-    t.string "interest"
-    t.index ["mentor_applicant_id"], name: "index_mentor_applicant_interests_on_mentor_applicant_id"
   end
 
   create_table "mentor_applicant_majors", force: :cascade do |t|
@@ -152,6 +137,7 @@ ActiveRecord::Schema.define(version: 2021_05_09_070143) do
     t.integer "applicant_status", default: 0
     t.string "hobby"
     t.string "extra_component"
+    t.string "interests"
   end
 
   create_table "mentors", force: :cascade do |t|
@@ -212,8 +198,6 @@ ActiveRecord::Schema.define(version: 2021_05_09_070143) do
 
   add_foreign_key "invitations", "events"
   add_foreign_key "invitations", "users"
-  add_foreign_key "mentee_applicant_interests", "mentee_applicants"
-  add_foreign_key "mentor_applicant_interests", "mentor_applicants"
   add_foreign_key "mentor_applicant_majors", "mentor_applicants"
   add_foreign_key "mentors_mentees", "mentees"
   add_foreign_key "mentors_mentees", "mentors"

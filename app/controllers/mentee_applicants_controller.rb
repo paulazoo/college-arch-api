@@ -57,7 +57,7 @@ class MenteeApplicantsController < ApplicationController
     @mentee_applicant.immigrant = mentee_applicant_params[:immigrant] if mentee_applicant_params[:immigrant]
     @mentee_applicant.undoc = mentee_applicant_params[:undoc] if mentee_applicant_params[:undoc]
     @mentee_applicant.grad_year = mentee_applicant_params[:grad_year] if mentee_applicant_params[:grad_year]
-
+    @mentee_applicant.interests = mentee_applicant_params[:interests] if mentee_applicant_params[:interests]
 
     if @mentee_applicant.save
       render(json: @mentee_applicant, status: :created)
@@ -102,6 +102,7 @@ class MenteeApplicantsController < ApplicationController
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
       :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc, \
       :hobby, :extra_component, \
+      :interests, \
       :applicant_password, :applicant_status ])
   end
 end

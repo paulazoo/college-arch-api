@@ -42,6 +42,7 @@ class MentorApplicantsController < ApplicationController
     @mentor_applicant.essay = mentor_applicant_params[:essay] if mentor_applicant_params[:essay]
     @mentor_applicant.hobby = mentor_applicant_params[:hobby] if mentor_applicant_params[:hobby]
     @mentor_applicant.extra_component = mentor_applicant_params[:extra_component] if mentor_applicant_params[:extra_component]
+    @mentor_applicant.interests = mentor_applicant_params[:interests] if mentor_applicant_params[:interests]
 
     # backgrounds
     @mentor_applicant.first_gen = mentor_applicant_params[:first_gen] if mentor_applicant_params[:first_gen]
@@ -101,6 +102,7 @@ class MentorApplicantsController < ApplicationController
       :first_gen, :low_income, :stem_girl, :single_parent, :disabled, :lgbt, \
       :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc, \
       :hobby, :extra_component, \
+      :interests, \
       :password, :applicant_status ])
   end
 end
