@@ -58,6 +58,7 @@ class MenteeApplicantsController < ApplicationController
     @mentee_applicant.undoc = mentee_applicant_params[:undoc] if mentee_applicant_params[:undoc]
     @mentee_applicant.grad_year = mentee_applicant_params[:grad_year] if mentee_applicant_params[:grad_year]
 
+
     if @mentee_applicant.save
       render(json: @mentee_applicant, status: :created)
     else
