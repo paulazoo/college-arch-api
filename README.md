@@ -68,7 +68,8 @@ You can only request the server from the following origins:
   - llin1@college.harvard.edu
   - lindalin2812@gmail.com
   - snalani731@gmail.com
-
+  - lleanza01@gmail.com
+  - rina.nagashima@gmail.com
 
 ## HTTP Endpoints
 
