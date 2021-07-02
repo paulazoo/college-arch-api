@@ -60,6 +60,7 @@ class MentorApplicantsController < ApplicationController
     @mentor_applicant.immigrant = mentor_applicant_params[:immigrant] if mentor_applicant_params[:immigrant]
     @mentor_applicant.undoc = mentor_applicant_params[:undoc] if mentor_applicant_params[:undoc]
     @mentor_applicant.grad_year = mentor_applicant_params[:grad_year] if mentor_applicant_params[:grad_year]
+    @mentor_applicant.multi_mentees = mentor_applicant_params[:multi_mentees] if mentor_applicant_params[:multi_mentees]
 
     if @mentor_applicant.save
       render(json: @mentor_applicant, status: :created)
@@ -103,6 +104,7 @@ class MentorApplicantsController < ApplicationController
       :black, :hispanic, :asian, :pi, :me_na, :native, :immigrant, :undoc, \
       :hobby, :extra_component, \
       :interests, \
+      :multi_mentees, \
       :password, :applicant_status ])
   end
 end
