@@ -111,7 +111,7 @@ class MenteeApplicantsController < ApplicationController
         
         @mentee = mentee_user.account
 
-        mentee_user.update(email: applicant.email, phone: applicant.phone, name: applicant.first_name + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+        mentee_user.update(email: applicant.email, phone: applicant.phone, given_name: applicant.first_name, family_name: applicant.family_name, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
         
         if mentee_user.save
         else

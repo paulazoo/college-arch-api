@@ -88,6 +88,42 @@ class MentorApplicantsController < ApplicationController
       render(json: @mentor_applicant.errors, status: :unprocessable_entity)
     end
   end
+  
+  # POST /mentor_applicants/accept
+  def accept
+    MentorApplicant.all.each {
+      |applicant|
+      
+      # first create the mentor record
+      mentor_user = User.find_by(email: applicant.email)
+
+      if mentor_user.blank?
+        @mentor = Mentor.new()
+
+        @mentor.user = User.new(account: @mentor, email: applicant.email, phone: applicant.phone, given_name: applicant.first_name, family_name: applicant.family_name, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+
+        if @mentor.save
+        else
+          puts @mentor.errors
+        end
+
+      else
+      #   puts 'User already exists'
+        
+        @mentor = mentor_user.account
+
+        mentor_user.update(email: applicant.email, phone: applicant.phone, name: applicant.first_name + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+        
+        if mentor_user.save
+        else
+          puts mentor_user.errors
+        end
+      end
+
+    }
+
+    render(json: { message: 'All accepted!' })
+  end
 
   private
 
