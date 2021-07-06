@@ -1,5 +1,5 @@
 class GoogleSheetsController < ApplicationController
-  before_action :authenticate_user
+  before_action :authenticate_user, only: %i[import_events import_mentee_mentor export_joined export_registered]
 
   # name, description, link, kind, start_time, end_time, image_url, host, public_link, invites: []
   #  0    1            2     3     4           5          6          7     8            9
@@ -159,7 +159,7 @@ class GoogleSheetsController < ApplicationController
     rows = worksheet.rows
     headers, *data = rows
 
-    data.each{ 
+    data.each{
       |r|
 
       # first create the mentee record
@@ -226,10 +226,43 @@ class GoogleSheetsController < ApplicationController
     render(json: { message: 'Import successful!' })
   end
 
+  
+  # POST /google_sheets/match_accepted
+  def match_accepted
+    session = GoogleDrive::Session.from_service_account_key("client_secret.json")
+    spreadsheet = session.spreadsheet_by_title('import_match_accepted')
+    worksheet = spreadsheet.worksheets.first
+    rows = worksheet.rows
+    headers, *data = rows
+
+    data.each{
+      |r|
+
+      @mentee_user = User.find_by(email: r[0])
+      @mentee = @mentee_user.account
+      render(json: { message: 'Mentee does not exist' }) if @mentee.blank?
+
+      @mentor_user = User.find_by(email: r[1])
+      @mentor = @mentor_user.account
+      render(json: { message: 'Mentor does not exist'}) if @mentor.blank?
+
+      @mentor.mentees << @mentee
+
+      if @mentor.save
+        # render(json: { mentee: @mentee, mentor: @mentor }, status: :created)
+      else
+        render(json: @mentor.errors, status: :unprocessable_entity)
+      end
+    }
+
+    render(json: { message: 'Matched accepted successful!' })
+  end
+
   private
   
   def google_sheet_params
-    params.permit([:file_name, :event_id])
+    params.permit([:file_name, :event_id, \
+      :match_accepted])
   end
 
 end

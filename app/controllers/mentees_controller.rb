@@ -125,6 +125,6 @@ class MenteesController < ApplicationController
   end
 
   def mentee_params
-    params.permit([:email, :mentee_id, :mentor_id, :batch_emails])
+    params.permit([:email, :mentee_id, :mentor_id, :batch_emails ])
   end
 end

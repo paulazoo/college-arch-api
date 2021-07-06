@@ -109,10 +109,12 @@ class MentorApplicantsController < ApplicationController
 
       else
       #   puts 'User already exists'
-        
-        @mentor = mentor_user.account
+        old_account = mentor_user.account
+        old_account.destroy
 
-        mentor_user.update(email: applicant.email, phone: applicant.phone, name: applicant.first_name + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+        @mentor = Mentor.new()
+        
+        mentor_user.update(account: @mentor, email: applicant.email, phone: applicant.phone, name: applicant.first_name + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
         
         if mentor_user.save
         else

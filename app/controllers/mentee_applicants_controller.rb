@@ -107,11 +107,13 @@ class MenteeApplicantsController < ApplicationController
         end
 
       else
-      #   puts 'User already exists'
-        
-        @mentee = mentee_user.account
+        #   puts 'User already exists'
+        old_account = mentee_user.account
+        old_account.destroy
 
-        mentee_user.update(email: applicant.email, phone: applicant.phone, given_name: applicant.first_name, family_name: applicant.family_name, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+        @mentee = Mentee.new()
+        
+        mentee_user.update(account: @mentee, email: applicant.email, phone: applicant.phone, given_name: applicant.first_name, family_name: applicant.family_name, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
         
         if mentee_user.save
         else

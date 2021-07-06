@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   end
 
   post 'mentees/batch' => 'mentees#batch'
+  post 'google_sheets/match_accepted' => 'google_sheets#match_accepted'
 
   resources :mentees, only: %i[index create]
 
@@ -53,6 +54,7 @@ Rails.application.routes.draw do
 
   post 'emails/mail' => 'emails#mail'
   post 'emails/event_reminder' => 'emails#event_reminder'
+
   post 'mentee_applicants/accept' => 'mentee_applicants#accept'
   post 'mentor_applicants/accept' => 'mentor_applicants#accept'
 

@@ -64,7 +64,7 @@ You can only request the server from the following origins:
   - reachpaulazhu@gmail.com
   - team.collegearch@gmail.com
   - tech.collegearch@gmail.com
-  - programming.collegearch@gmail.com
+  - program.collegearch@gmail.com
   - llin1@college.harvard.edu
   - lindalin2812@gmail.com
   - snalani731@gmail.com
