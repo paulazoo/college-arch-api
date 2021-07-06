@@ -88,6 +88,42 @@ class MenteeApplicantsController < ApplicationController
     end
   end
 
+  # POST /mentee_applicants/accept
+  def accept
+    MenteeApplicant.all.each {
+      |applicant|
+      
+      # first create the mentee record
+      mentee_user = User.find_by(email: applicant.email)
+
+      if mentee_user.blank?
+        @mentee = Mentee.new()
+
+        @mentee.user = User.new(account: @mentee, email: applicant.email, phone: applicant.phone, name: applicant.first_name + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+
+        if @mentee.save
+        else
+          puts @mentee.errors
+        end
+
+      else
+      #   puts 'User already exists'
+        
+        @mentee = mentee_user.account
+
+        mentee_user.update(email: applicant.email, phone: applicant.phone, name: applicant.first_name + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+        
+        if mentee_user.save
+        else
+          puts mentee_user.errors
+        end
+      end
+
+    }
+
+    render(json: { message: 'All accepted!' })
+  end
+
   private
 
   def set_mentee_applicant
