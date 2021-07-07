@@ -62,6 +62,7 @@ class ApplicationController < ActionController::API
       current_user.email == 'team.collegearch@gmail.com' || \
       current_user.email == 'tech.collegearch@gmail.com' || \
       current_user.email == 'program.collegearch@gmail.com' || \
+      current_user.email == 'recruitment.collegearch@gmail.com' || \
       current_user.email == 'snalani731@gmail.com' || \
       current_user.email == 'lleanza01@gmail.com' || \
       current_user.email == 'rina.nagashima@gmail.com' || \
