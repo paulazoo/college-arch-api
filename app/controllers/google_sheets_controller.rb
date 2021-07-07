@@ -246,13 +246,13 @@ class GoogleSheetsController < ApplicationController
       @mentor = @mentor_user.account
       render(json: { message: 'Mentor does not exist'}) if @mentor.blank?
 
-    #   @mentor.mentees << @mentee
+      @mentor.mentees << @mentee
 
-    #   if @mentor.save
-    #     # render(json: { mentee: @mentee, mentor: @mentor }, status: :created)
-    #   else
-    #     render(json: @mentor.errors, status: :unprocessable_entity)
-    #   end
+      if @mentor.save
+        # render(json: { mentee: @mentee, mentor: @mentor }, status: :created)
+      else
+        render(json: @mentor.errors, status: :unprocessable_entity)
+      end
     }
 
     render(json: { message: 'Matched accepted successful!' })
