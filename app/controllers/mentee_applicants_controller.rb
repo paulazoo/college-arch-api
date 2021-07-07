@@ -99,7 +99,7 @@ class MenteeApplicantsController < ApplicationController
       if mentee_user.blank?
         @mentee = Mentee.new()
 
-        @mentee.user = User.new(account: @mentee, email: applicant.email, phone: applicant.phone, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+        @mentee.user = User.new(account: @mentee, email: applicant.email.strip, phone: applicant.phone, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
 
         if @mentee.save
         else
@@ -113,7 +113,7 @@ class MenteeApplicantsController < ApplicationController
 
         @mentee = Mentee.new()
         
-        mentee_user.update(account: @mentee, email: applicant.email, phone: applicant.phone, given_name: applicant.first_name, family_name: applicant.family_name, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+        mentee_user.update(account: @mentee, email: applicant.email.strip, phone: applicant.phone, given_name: applicant.first_name, family_name: applicant.family_name, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
         
         if mentee_user.save
         else

@@ -100,7 +100,7 @@ class MentorApplicantsController < ApplicationController
       if mentor_user.blank?
         @mentor = Mentor.new()
 
-        @mentor.user = User.new(account: @mentor, email: applicant.email, phone: applicant.phone, given_name: applicant.first_name, family_name: applicant.family_name, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+        @mentor.user = User.new(account: @mentor, email: applicant.email.strip, phone: applicant.phone, given_name: applicant.first_name, family_name: applicant.family_name, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
 
         if @mentor.save
         else
@@ -114,7 +114,7 @@ class MentorApplicantsController < ApplicationController
 
         @mentor = Mentor.new()
         
-        mentor_user.update(account: @mentor, email: applicant.email, phone: applicant.phone, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
+        mentor_user.update(account: @mentor, email: applicant.email.strip, phone: applicant.phone, name: applicant.first_name + " " + applicant.family_name, school: applicant.school, grad_year: applicant.grad_year)
         
         if mentor_user.save
         else
