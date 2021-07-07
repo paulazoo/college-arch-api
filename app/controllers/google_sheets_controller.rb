@@ -229,14 +229,14 @@ class GoogleSheetsController < ApplicationController
   
   # POST /google_sheets/match_accepted
   def match_accepted
-    # session = GoogleDrive::Session.from_service_account_key("client_secret.json")
-    # spreadsheet = session.spreadsheet_by_title('import_match_accepted')
-    # worksheet = spreadsheet.worksheets.first
-    # rows = worksheet.rows
-    # headers, *data = rows
+    session = GoogleDrive::Session.from_service_account_key("client_secret.json")
+    spreadsheet = session.spreadsheet_by_title('import_match_accepted')
+    worksheet = spreadsheet.worksheets.first
+    rows = worksheet.rows
+    headers, *data = rows
 
-    # data.each{
-    #   |r|
+    data.each{
+      |r|
 
     #   @mentee_user = User.find_by(email: r[0])
     #   @mentee = @mentee_user.account
@@ -253,7 +253,7 @@ class GoogleSheetsController < ApplicationController
     #   else
     #     render(json: @mentor.errors, status: :unprocessable_entity)
     #   end
-    # }
+    }
 
     render(json: { message: 'Matched accepted successful!' })
   end
