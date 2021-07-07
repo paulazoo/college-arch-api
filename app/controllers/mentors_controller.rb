@@ -116,6 +116,11 @@ class MentorsController < ApplicationController
     render(json: { mentees: finished_mentors, status: :ok })
   end
 
+  # POST mentors/view_unmatched
+  def view_unmatched
+    @unmatched_mentors = Mentor.where('id NOT IN (SELECT DISTINCT(mentor_id) FROM mentors_mentees)')
+    return render(json: {unmatched_mentors: @unmatched_mentors})
+  end
 
   private
 

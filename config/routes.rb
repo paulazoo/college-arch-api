@@ -33,6 +33,9 @@ Rails.application.routes.draw do
 
   resources :mentees, only: %i[index create]
 
+  post 'mentees/view_unmatched' => 'mentees#view_unmatched'
+  post 'mentors/view_unmatched' => 'mentors#view_unmatched'
+
   get 'events/public' => 'events#public'
 
   resources :events, only: [] do
