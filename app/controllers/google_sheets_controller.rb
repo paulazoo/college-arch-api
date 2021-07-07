@@ -238,13 +238,13 @@ class GoogleSheetsController < ApplicationController
     data.each{
       |r|
 
-    #   @mentee_user = User.find_by(email: r[0])
-    #   @mentee = @mentee_user.account
-    #   render(json: { message: 'Mentee does not exist' }) if @mentee.blank?
+      @mentee_user = User.find_by(email: r[0])
+      @mentee = @mentee_user.account
+      render(json: { message: 'Mentee does not exist' }) if @mentee.blank?
 
-    #   @mentor_user = User.find_by(email: r[1])
-    #   @mentor = @mentor_user.account
-    #   render(json: { message: 'Mentor does not exist'}) if @mentor.blank?
+      @mentor_user = User.find_by(email: r[1])
+      @mentor = @mentor_user.account
+      render(json: { message: 'Mentor does not exist'}) if @mentor.blank?
 
     #   @mentor.mentees << @mentee
 
