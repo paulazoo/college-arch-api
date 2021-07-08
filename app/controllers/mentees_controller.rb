@@ -124,6 +124,12 @@ class MenteesController < ApplicationController
     return render(json: @unmatched_mentees.to_json(include: :user), status: :ok)
   end
 
+  # POST mentees/view_matched
+  def view_matched
+    @matched_mentees = Mentee.where('id IN (SELECT DISTINCT(mentee_id) FROM mentors_mentees)')
+    render(json: @matched_mentees.to_json(include: [:user, mentor: { include: :user }]))
+  end
+  
   private
 
   def set_mentee

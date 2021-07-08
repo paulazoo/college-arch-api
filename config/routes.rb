@@ -35,6 +35,7 @@ Rails.application.routes.draw do
 
   post 'mentees/view_unmatched' => 'mentees#view_unmatched'
   post 'mentors/view_unmatched' => 'mentors#view_unmatched'
+  post 'mentees/view_matched' => 'mentees#view_matched'
 
   get 'events/public' => 'events#public'
 
