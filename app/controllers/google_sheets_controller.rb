@@ -243,13 +243,7 @@ class GoogleSheetsController < ApplicationController
   
   # POST /google_sheets/match_accepted
   def match_accepted
-    User.all.each{
-      |u|
-      if u.account.blank?
-      else
-        u.account.destroy
-      end
-    }
+    MentorsMentee.destroy_all
 
     session = GoogleDrive::Session.from_service_account_key("client_secret.json")
     spreadsheet = session.spreadsheet_by_title('import_match_accepted')
@@ -263,13 +257,21 @@ class GoogleSheetsController < ApplicationController
       @mentee_user = User.find_by(email: r[0])
       @mentee_user = User.new(email: r[0]) if @mentee_user.blank?
       @mentee_user.grad_year = 2022
-
+      
+      if @mentee_user.account.blank?
+      else
+        @mentee_user.account.destroy
+      end
       @mentee_user.account = Mentee.new()
       @mentee_user.save
 
       @mentor_user = User.find_by(email: r[1])
       @mentor_user = User.new(email: r[1]) if @mentor_user.blank?
 
+      if @mentor_user.account.blank?
+      else
+        @mentor_user.account.destroy
+      end
       @mentor_user.account = Mentor.new()
       @mentor_user.save
 
