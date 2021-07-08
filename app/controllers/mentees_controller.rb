@@ -127,7 +127,18 @@ class MenteesController < ApplicationController
   # POST mentees/view_matched
   def view_matched
     @matched_mentees = Mentee.where('id IN (SELECT DISTINCT(mentee_id) FROM mentors_mentees)')
-    render(json: @matched_mentees.to_json(include: [:user, mentor: { include: :user }]))
+    
+    @mentee_emails = ''
+    @mentor_emails = ''
+    @together_emails = ''
+    
+    @matched_mentees.each {
+      |m|
+      @mentee_emails = @mentee_emails + m.user.email + ','
+      @mentor_emails = @mentor_emails + m.mentor.user.email + ','
+      @together_emails = @together_emails + m.user.email + ":" + m.mentor.user.email + ','
+    }
+    render(json: { mentee_emails: @mentee_emails, mentor_emails: @mentor_emails}, status: :ok)
   end
   
   private
