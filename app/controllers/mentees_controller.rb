@@ -138,7 +138,7 @@ class MenteesController < ApplicationController
       @mentor_emails = @mentor_emails + m.mentor.user.email + ','
       @together_emails = @together_emails + m.user.email + ":" + m.mentor.user.email + ','
     }
-    render(json: { mentee_emails: @mentee_emails, mentor_emails: @mentor_emails}, status: :ok)
+    render(json: { mentee_emails: @mentee_emails, mentor_emails: @mentor_emails, together_emails: @together_emails}, status: :ok)
   end
   
   private
