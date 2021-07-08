@@ -41,6 +41,21 @@ class GoogleSheetsController < ApplicationController
     render(json: { message: "Import successful!" })
   end
 
+  # POST google_sheets/export_matched
+  def export_matched
+    session = GoogleDrive::Session.from_service_account_key("client_secret.json")
+    spreadsheet = session.spreadsheet_by_title('export_registered')
+    worksheet = spreadsheet.worksheets.first
+
+    worksheet.insert_rows(worksheet.num_rows + 1,
+      [
+        ["Mentee Email", "Mentor Email"],
+      ]
+    )
+
+    worksheet.save
+  end
+
   # POST /google_sheets/export_registered
   def export_registered
     render(json: { message: 'You are not master' }, status: :unauthorized) unless is_master
@@ -225,10 +240,17 @@ class GoogleSheetsController < ApplicationController
 
     render(json: { message: 'Import successful!' })
   end
-
   
   # POST /google_sheets/match_accepted
   def match_accepted
+    User.all.each{
+      |u|
+      if u.account.blank?
+      else
+        u.account.destroy
+      end
+    }
+
     session = GoogleDrive::Session.from_service_account_key("client_secret.json")
     spreadsheet = session.spreadsheet_by_title('import_match_accepted')
     worksheet = spreadsheet.worksheets.first
@@ -238,23 +260,27 @@ class GoogleSheetsController < ApplicationController
     data.each{
       |r|
 
-      puts r[0]
-      puts r[1]
-
       @mentee_user = User.find_by(email: r[0])
-      @mentee = @mentee_user.account
-      render(json: { message: 'Mentee does not exist' }) if @mentee.blank?
+      @mentee_user = User.new(email: r[0]) if @mentee_user.blank?
+      @mentee_user.grad_year = 2022
+
+      @mentee_user.account = Mentee.new()
+      @mentee_user.save
 
       @mentor_user = User.find_by(email: r[1])
-      @mentor = @mentor_user.account
-      render(json: { message: 'Mentor does not exist'}) if @mentor.blank?
+      @mentor_user = User.new(email: r[1]) if @mentor_user.blank?
 
+      @mentor_user.account = Mentor.new()
+      @mentor_user.save
+
+      @mentor = @mentor_user.account
+      @mentee = @mentee_user.account
       @mentor.mentees << @mentee
 
       if @mentor.save
         # render(json: { mentee: @mentee, mentor: @mentor }, status: :created)
       else
-        render(json: @mentor.errors, status: :unprocessable_entity)
+        render(json: @mentor_user.errors, status: :unprocessable_entity)
       end
     }
 
