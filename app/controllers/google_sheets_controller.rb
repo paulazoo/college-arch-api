@@ -241,6 +241,34 @@ class GoogleSheetsController < ApplicationController
     render(json: { message: 'Import successful!' })
   end
   
+  # POST /google_sheets/edit_table
+  def edit_table
+    duplicate_users = User.select("id, count(id) as quantity")
+    .group(:email)
+    .having("quantity > 1")
+
+    duplicate_users.each{
+      |u|
+
+      if u.account.blank?
+        u.destroy
+      end
+
+      if u.account_type == 'Mentee'
+        if u.account.mentor.blank?
+          u.account.destroy
+          u.destroy
+        end
+
+      elsif u.account_type == 'Mentor'
+        if u.account.mentees.blank?
+          u.account.destroy
+          u.destroy
+        end
+      end
+    }
+  end
+
   # POST /google_sheets/match_accepted
   def match_accepted
     # MentorsMentee.destroy_all

@@ -62,4 +62,6 @@ Rails.application.routes.draw do
   post 'mentee_applicants/accept' => 'mentee_applicants#accept'
   post 'mentor_applicants/accept' => 'mentor_applicants#accept'
 
+  post 'google_sheets/edit_table' => 'google_sheets#edit_table'
+
 end
