@@ -5,6 +5,13 @@ class ApplicationController < ActionController::API
 
   private
 
+  def encode_applicant_token(payload={})
+    payload[:typ] = "applicant"
+    payload[:exp] = 6.hours.from_now.to_i # Long access token until refresh token works
+    payload[:iat] = Time.now.to_i
+    JWT.encode(payload, ENV['SECRET_KEY_BASE'])
+  end
+
   def encode_access_token(payload={})
     payload[:typ] = "access"
     payload[:exp] = 6.hours.from_now.to_i # Long access token until refresh token works

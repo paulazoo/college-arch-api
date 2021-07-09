@@ -1,5 +1,5 @@
 class MentorApplicantsController < ApplicationController
-  before_action :authenticate_user, only: %i[index show update]
+  before_action :authenticate_user, only: %i[index show update accept]
   before_action :set_mentor_applicant, only: %i[show update]
 
   # GET /mentor_applicants

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   # authentication and login
   post 'google_login' => 'users#google_login'
+  post 'applicant_google_login' => 'users#applicant_google_login'
   post 'tokens/refresh' => 'tokens#refresh'
 
   # master
@@ -62,6 +63,7 @@ Rails.application.routes.draw do
   post 'mentee_applicants/accept' => 'mentee_applicants#accept'
   post 'mentor_applicants/accept' => 'mentor_applicants#accept'
 
+  # editing through api
   post 'google_sheets/edit_table' => 'google_sheets#edit_table'
 
 end

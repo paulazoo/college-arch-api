@@ -57,6 +57,8 @@ class UsersController < ApplicationController
         return render(json: { message: 'You are not a mentor or mentee!' }, status: :ok)
       
       else
+        return render(json: { message: 'You are not a mentor or mentee!' }, status: :ok) if @user.status != 'accepted'
+        
         @user.update(
           name: name,
           image_url: image_url,
@@ -88,8 +90,95 @@ class UsersController < ApplicationController
         message: 'Logged in!',
         access_token: encode_access_token({ user_id: @user.id }),
         refresh_token: encode_refresh_token({ user_id: @user.id, id: refresh_token_id }),
-        user: @user.as_json(except: [:refresh_token_id]),
+        user: @user.as_json(except: [:refresh_token_id, :status]),
         account: @user.account,
+        }, status: :ok)
+    else
+      render(json: { message: 'Incorrect login' }, status: :unauthorized)
+    end
+  end
+
+  # POST /applicant_google_login
+  def applicant_google_login
+    # jwk = {
+    #   "keys": [
+    #     {
+    #       "use": "sig",
+    #       "kid": "744f60e9fb515a2a01c11ebeb228712860540711",
+    #       "e": "AQAB",
+    #       "n": "omK-BgTldoGjO0zHDNXELv4756vbdFPcfTqzs21pQkW9kYlos11jFIomZLa9WgtUVfjF1qjPm8J_UGcmyQNoXOqweY6UusEXhb-sLQ4_5o_R1TlrP2X0bmDwJqMa41ZZR2cs0XGP8B9bWMpq-hTwOHLzMgMc0e4Dty7u8vASve_aH6_11FvNDzFu79ixCId8VwxEPdTeWCZXYRQpTQpw0Kh_koXlV39iVvcH2DmuCmXJKoW2PDXOD4Y7wF_R0mYS6df13jBRNrvlBEDMgx6utKRFYDTWeRrTPBnseWY9Kk48mcAuwOucMs8ce2q9cjyFypnoIkaIdz8dumLk8iqjNQ",
+    #       "kty": "RSA",
+    #       "alg": "RS256"
+    #     },
+    #     {
+    #       "kid": "6bc63e9f18d561b34f5668f88ae27d48876d8073",
+    #       "kty": "RSA",
+    #       "e": "AQAB",
+    #       "alg": "RS256",
+    #       "use": "sig",
+    #       "n": "oprIf14gjc4QjI4YUC0COkn4KAjkBeaEYiPm6jo1G9gngKGflmmfsviR8M3rIKs96DzgurM2U1X2TUIDhqBvNHtUONclV6anAR220PcS72l__rCo9tRQxk7pUDQSZxbbi6a0t5w35FyBoF6agPSK3-nEfOk1_vwD1pivo5X7lrvHSu_0lZ-IfaNF-DhErGTeWb2Zu4fOMtadWfRJrTp3UdaWFvHZxkVZLIQGNFeEcKapVpAB2ey8bmzz1rYHx0LA-DWMxhfiBvA81e68S2dD8ukHjDtgzh2lkWJffJ-H7ncF7Sli_RBuWShWl0q0CtIeW5PBkwVCmrktZtINPV7h5Q"
+    #     }
+    #   ]
+    # }
+
+    # jwk_loader = ->(options) do
+    #   @cached_keys = nil if options[:invalidate] # need to reload the keys
+    #   @cached_keys ||= { keys: [jwk.export] }
+    # end
+    
+    begin
+      # decoded_hash = JWT.decode(user_params[:google_token], nil, true, { algorithms: ['RS512'], jwks: jwk_loader})
+      decoded_hash = JWT.decode(user_params[:google_token], nil, false)
+    # rescue JWT::JWKError
+    #   decoded_hash = []
+    rescue JWT::DecodeError
+      decoded_hash = []
+    end
+
+    if decoded_hash && !decoded_hash.empty?
+      return render(json: { message: 'Incorrect client' }, status: :unauthorized) if decoded_hash[0]['aud'] != ENV['GOOGLE_OAUTH2_CLIENT_ID']
+      return render(json: { message: 'Incorrect issuer' }, status: :unauthorized) if decoded_hash[0]['iss'] != 'accounts.google.com'
+
+      google_id = decoded_hash[0]['sub']
+      email = decoded_hash[0]['email']
+      name = decoded_hash[0]['name']
+      given_name = decoded_hash[0]['given_name']
+      family_name = decoded_hash[0]['family_name']
+      image_url = decoded_hash[0]['picture']
+
+      @user = User.find_by(email: email)
+      
+      if @user.blank?
+        @user = User.new(
+          name: name,
+          image_url: image_url,
+          given_name: given_name,
+          family_name: family_name,
+          google_id: google_id
+        )
+      else
+        @user.update(
+          name: name,
+          image_url: image_url,
+          given_name: given_name,
+          family_name: family_name,
+          google_id: google_id,
+        )
+      end
+
+      @user.update(display_name: name) if @user.display_name.blank?
+
+      refresh_token_id = SecureRandom.uuid
+
+      @user.update(
+        refresh_token_id: refresh_token_id
+      )
+
+      render(json: {
+        message: 'Logged in!',
+        applicant_token: encode_applicant_token({ user_id: @user.id }),
+        refresh_token: encode_refresh_token({ user_id: @user.id, id: refresh_token_id }),
+        user: @user.as_json(except: [:refresh_token_id, :status]),
         }, status: :ok)
     else
       render(json: { message: 'Incorrect login' }, status: :unauthorized)

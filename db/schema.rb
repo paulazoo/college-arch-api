@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_02_142618) do
+ActiveRecord::Schema.define(version: 2021_07_09_182559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,6 +194,17 @@ ActiveRecord::Schema.define(version: 2021_07_02_142618) do
     t.string "school"
     t.integer "grad_year"
     t.string "refresh_token_id"
+    t.string "interests"
+    t.string "backgrounds"
+    t.string "hobbies"
+    t.string "languages"
+    t.string "location"
+    t.string "city"
+    t.boolean "us_living", default: true
+    t.string "essay"
+    t.string "extra_component"
+    t.integer "multi_mentees", default: 1
+    t.string "status", default: "undecided"
     t.index ["account_type", "account_id"], name: "index_users_on_account_type_and_account_id"
   end
 
