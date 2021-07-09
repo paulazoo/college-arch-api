@@ -269,10 +269,12 @@ class GoogleSheetsController < ApplicationController
       @mentor_user = User.new(email: r[1]) if @mentor_user.blank?
 
       if @mentor_user.account.blank?
-      else
+        @mentor_user.account = Mentor.new()
+      elsif @mentor_user.account_type == 'Mentee'
         @mentor_user.account.destroy
+        @mentor_user.account = Mentor.new()
+      else
       end
-      @mentor_user.account = Mentor.new()
       @mentor_user.save
 
       @mentor = @mentor_user.account
