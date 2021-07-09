@@ -243,30 +243,42 @@ class GoogleSheetsController < ApplicationController
   
   # POST /google_sheets/edit_table
   def edit_table
-    duplicate_users = User.select("id, count(id) as quantity")
-    .group(:email)
-    .having("quantity > 1")
+    duplicate_users = User.find_by_sql('SELECT *
+      FROM users
+      WHERE email IN (SELECT email 
+                            FROM users 
+                            GROUP BY email
+                            HAVING COUNT(email) > 1)')
 
+    for_destroying = []                            
     duplicate_users.each{
       |u|
 
       if u.account.blank?
+        for_destroying.append(u)
         u.destroy
-      end
 
-      if u.account_type == 'Mentee'
-        if u.account.mentor.blank?
-          u.account.destroy
-          u.destroy
-        end
+      else
+        if u.account_type == 'Mentee'
+          if u.account.mentor.blank?
+            for_destroying.append(u)
+            for_destroying.append(u.account)
+            u.account.destroy
+            u.destroy
+          end
 
-      elsif u.account_type == 'Mentor'
-        if u.account.mentees.blank?
-          u.account.destroy
-          u.destroy
+        elsif u.account_type == 'Mentor'
+          if u.account.mentees.blank?
+            for_destroying.append(u)
+            for_destroying.append(u.account)
+            u.account.destroy
+            u.destroy
+          end
+          
         end
       end
     }
+    return render(json: {found: for_destroying}, status: :ok)
   end
 
   # POST /google_sheets/match_accepted
