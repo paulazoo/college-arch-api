@@ -243,7 +243,7 @@ class GoogleSheetsController < ApplicationController
   
   # POST /google_sheets/match_accepted
   def match_accepted
-    MentorsMentee.destroy_all
+    # MentorsMentee.destroy_all
 
     session = GoogleDrive::Session.from_service_account_key("client_secret.json")
     spreadsheet = session.spreadsheet_by_title('import_match_accepted')
