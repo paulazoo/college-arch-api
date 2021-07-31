@@ -8,9 +8,7 @@ Rails.application.routes.draw do
   put 'users/master_update' => 'users#master_update'
 
   # applications
-  resources :mentee_applicants, only: %i[index create show update]
-  
-  resources :mentor_applicants, only: %i[index create show update]
+  put 'users/applicant_update' => 'users#applicant_update'
 
   # rest api
   resources :users, only: [] do

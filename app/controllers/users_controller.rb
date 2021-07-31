@@ -74,17 +74,6 @@ class UsersController < ApplicationController
       @user.update(
         refresh_token_id: refresh_token_id
       )
-      
-      Analytics.identify(
-        user_id: @user.id,
-        traits: {
-          user_id: @user.id,
-          email: @user.email.to_s,
-          name: @user.name.to_s,
-          google_id: @user.google_id.to_s,
-        },
-        context: { ip: request.remote_ip }
-      )
 
       render(json: {
         message: 'Logged in!',
@@ -209,8 +198,8 @@ class UsersController < ApplicationController
   # PUT /users/:id
   def update
     render(json: { errors: 'Not the correct user!' }, status: :unauthorized) if (current_user != @user)
- 
-    @user.email = user_params[:email] if user_params[:email]
+    
+    @user.email = user_params[:email].strip if user_params[:email]
     @user.phone = user_params[:phone] if user_params[:phone]
     @user.bio = user_params[:bio] if user_params[:bio]
     @user.display_name = user_params[:display_name] if user_params[:display_name]
@@ -225,13 +214,55 @@ class UsersController < ApplicationController
     end
   end
 
+  # PUT /users/applicant_update
+  def applicant_update
+    require 'net/http'
+    require 'uri'
+    #Send to Slack
+    uri = URI("https://hooks.slack.com/services/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")
+    header = { "Content-Type" => "application/json" }
+
+    incoming_app_notif = { "text" => \
+                          "\n Application: " + user_params[:applicant_type] + \
+                          "\n Name: " + user_params[:first_name] + " " +user_params[:family_name] + \
+                          "\n Email: " + user_params[:email] \
+                        }
+    request = Net::HTTP.post(uri, incoming_app_notif.to_json, header)
+
+    @user = User.find_by(email: user_params[:email])
+    return render(json: { errors: 'Not the correct user!' }, status: :unauthorized) if (current_applicant != @user)
+    
+    @user.phone = user_params[:phone] if user_params[:phone]
+    @user.school = user_params[:school] if user_params[:school]
+    @user.grad_year = user_params[:grad_year] if user_params[:grad_year]
+    @user.grad_year = 2022 if user_params[:applicant_type] == "Mentee"
+    @user.given_name = user_params[:first_name] if user_params[:first_name]
+    @user.family_name = user_params[:family_name] if user_params[:family_name]
+    @user.city = user_params[:city] if user_params[:city]
+    @user.us_living = user_params[:us_living] if user_params[:us_living]
+    @user.location = user_params[:state] if user_params[:us_living] == true 
+    @user.location = user_params[:country] if user_params[:us_living] == false
+    @user.essay = user_params[:essay] if user_params[:essay]
+    @user.backgrounds = user_params[:backgrounds] if user_params[:backgrounds]
+    @user.interests = user_params[:interests] if user_params[:interests]
+    @user.account_type = user_params[:applicant_type]
+    
+    @user.status = "applied"
+
+    if @user.save
+      return render(json: @user, status: :ok)
+    else
+      return render(json: @user.errors, status: :unprocessable_entity)
+    end
+  end
+
   # PUT /users/master_update
   def master_update
     render(json: { message: 'You are not master' }, status: :unauthorized) unless is_master
 
     other_user = User.find(user_params[:other_user_id])
 
-    other_user.email = user_params[:email] if user_params[:email]
+    other_user.email = user_params[:email].strip if user_params[:email]
     other_user.phone = user_params[:phone] if user_params[:phone]
     other_user.bio = user_params[:bio] if user_params[:bio]
     other_user.display_name = user_params[:display_name] if user_params[:display_name]
@@ -244,6 +275,15 @@ class UsersController < ApplicationController
     else
       render(json: other_user.errors, status: :unprocessable_entity)
     end
+  end
+
+  # PUT /users/update_status
+  def update_status
+    render(json: { message: 'You are not master' }, status: :unauthorized) unless is_master
+
+    other_user = User.find(user_params[:other_user_id])
+
+    other_user.status = user_params[:status] if user_params[:status]
   end
 
   # GET /users/:id/events
@@ -265,7 +305,12 @@ class UsersController < ApplicationController
 
   def user_params
     params.permit(:image_url, :bio, :display_name, :phone, :school, :grad_year, :email, \
-      :other_user_id, :google_token)
+      :other_user_id, :google_token, \
+      :applicant_user_id, :applicant_type, \
+      :city, :state,  :country, :essay, :first_name, :family_name, :us_living, \
+      :interests, :backgrounds, \
+      :status
+    )
   end
 
   def set_user
