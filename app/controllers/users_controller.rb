@@ -235,7 +235,7 @@ class UsersController < ApplicationController
     @user.phone = user_params[:phone] if user_params[:phone]
     @user.school = user_params[:school] if user_params[:school]
     @user.grad_year = user_params[:grad_year] if user_params[:grad_year]
-    @user.grad_year = 2022 if user_params[:applicant_type] == "Mentee"
+    @user.grad_year = 2023 if user_params[:applicant_type] == "Mentee"
     @user.given_name = user_params[:first_name] if user_params[:first_name]
     @user.family_name = user_params[:family_name] if user_params[:family_name]
     @user.city = user_params[:city] if user_params[:city]
@@ -246,6 +246,7 @@ class UsersController < ApplicationController
     @user.backgrounds = user_params[:backgrounds] if user_params[:backgrounds]
     @user.interests = user_params[:interests] if user_params[:interests]
     @user.account_type = user_params[:applicant_type]
+    @user.multi_mentees = user_params[:multi_mentees] if user_params[:applicant_type] == "Mentor"
     
     @user.status = "applied"
 
@@ -306,7 +307,7 @@ class UsersController < ApplicationController
   def user_params
     params.permit(:image_url, :bio, :display_name, :phone, :school, :grad_year, :email, \
       :other_user_id, :google_token, \
-      :applicant_user_id, :applicant_type, \
+      :applicant_user_id, :applicant_type, :multi_mentees, \
       :city, :state,  :country, :essay, :first_name, :family_name, :us_living, \
       :interests, :backgrounds, \
       :status
