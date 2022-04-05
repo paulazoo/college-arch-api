@@ -10,7 +10,7 @@ gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 4.0'
+gem 'webpacker', '~> 5.0'
 
 # psych 4 is incompatible with ruby 3.1
 gem 'psych', '< 4'
