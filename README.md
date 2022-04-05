@@ -10,6 +10,28 @@ You can only request the server from the following origins:
 - https://college-arch.herokuapp.com/
 - http://localhost:3000
 
+
+## Setup
+
+Requires:
+- node and npm
+- ruby
+- rails
+  - `gem install rails`
+- run `bundle install`
+  - may need to delete Gemfile.lock
+  - then run `bundle install` again
+- postgresql
+  - create a db named `college_arch` with user `college_arch`
+  - run `rails db:migrate RAILS_ENV=development`
+
+To run locally:
+- `rails server -p 3002` or `rails s -p 3002` to run on http://localhost:3002/
+
+To see all available routes:
+- `rails routes`
+
+
 ## Models/Schema
 
 ### User
