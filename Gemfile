@@ -28,9 +28,6 @@ gem 'jwt'
 gem 'knock'
 gem 'rack-cors'
 
-# Cloudinary image hosting service
-gem 'cloudinary'
-
 # Google sheets integration
 gem 'google_drive'
 

@@ -32,8 +32,8 @@ To troubleshoot heroku:
 - `heroku run console -a college-arch-api`
 
 ### Currently (220405) using
-- ruby: 2.6.0
-- rails: 6.0.2.1
+- ruby: 3.1.1
+- rails: 6.0.4.7
 - node: v16.14.2
 - npm: 8.5.0
 
