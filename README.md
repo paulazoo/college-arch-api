@@ -28,6 +28,9 @@ Requires:
 To run locally:
 - `rails server -p 3002` or `rails s -p 3002` to run on http://localhost:3002/
 
+To troubleshoot heroku:
+- `heroku run console -a college-arch-api`
+
 ### Currently (220405) using
 - ruby: 2.6.0
 - rails: 6.0.2.1
