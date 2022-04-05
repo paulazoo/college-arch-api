@@ -7,6 +7,8 @@ ruby '>=3.1.1'
 gem 'rails', '~> 6.0.4.7'
 # try to get rid of net smtp error
 gem 'net-smtp', require: false
+gem 'net-pop', require: false
+gem 'net-imap', require: false
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use Puma as the app server
