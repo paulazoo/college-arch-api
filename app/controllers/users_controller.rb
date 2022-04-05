@@ -2,6 +2,23 @@ class UsersController < ApplicationController
   before_action :authenticate_user, only: %i[show update index master_update]
   before_action :set_user, only: %i[show update events]
   before_action :authorize_user, only: %i[show update index]
+  
+  # POST /test
+  def test
+    @user = User.find_by(email: "paulazhu@college.harvard.edu")
+
+    if @user.blank?
+      @user = User.new(email: "paulazhu@college.harvard.edu")
+      @user.account = Mentor.new()
+    end
+    @user.status = "accepted"
+
+    if @user.save
+      render(json: @user, status: :created)
+    else
+      render(json: @user.errors, status: :unprocessable_entity)
+    end
+  end
 
   # POST /google_login
   def google_login
@@ -139,12 +156,14 @@ class UsersController < ApplicationController
       
       if @user.blank?
         @user = User.new(
+          email: email,
           name: name,
           image_url: image_url,
           given_name: given_name,
           family_name: family_name,
           google_id: google_id
         )
+
       else
         @user.update(
           name: name,
@@ -155,11 +174,11 @@ class UsersController < ApplicationController
         )
       end
 
-      @user.update(display_name: name) if @user.display_name.blank?
+      @user.update!(display_name: name) if @user.display_name.blank?
 
       refresh_token_id = SecureRandom.uuid
 
-      @user.update(
+      @user.update!(
         refresh_token_id: refresh_token_id
       )
 
@@ -245,8 +264,8 @@ class UsersController < ApplicationController
     @user.essay = user_params[:essay] if user_params[:essay]
     @user.backgrounds = user_params[:backgrounds] if user_params[:backgrounds]
     @user.interests = user_params[:interests] if user_params[:interests]
-    @user.account_type = user_params[:applicant_type]
     @user.multi_mentees = user_params[:multi_mentees] if user_params[:applicant_type] == "Mentor"
+    @user.account_type = user_params[:applicant_type]
     
     @user.status = "applied"
 
@@ -310,7 +329,7 @@ class UsersController < ApplicationController
       :applicant_user_id, :applicant_type, :multi_mentees, \
       :city, :state,  :country, :essay, :first_name, :family_name, :us_living, \
       :interests, :backgrounds, \
-      :status
+      :status, :user
     )
   end
 

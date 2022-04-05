@@ -3,10 +3,13 @@ class NewsletterEmailsController < ApplicationController
 
   # GET /newsletter_emails
   def index
+    puts "starting index"
     if is_master
+      puts "is master"
       @newsletter_emails = NewsletterEmail.all
       render(json: @newsletter_emails, status: :ok)
     else
+      puts "not master"
       render(json: { message: 'You are not master' }, status: :unauthorized)
     end
   end

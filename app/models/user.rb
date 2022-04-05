@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  belongs_to :account, :polymorphic => true
+  belongs_to :account, :polymorphic => true, optional: true
 
   # Whoops, please allow other people to edit emails
   # validates :email, uniqueness: true, presence: true

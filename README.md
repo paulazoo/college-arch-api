@@ -28,9 +28,11 @@ Requires:
 To run locally:
 - `rails server -p 3002` or `rails s -p 3002` to run on http://localhost:3002/
 
-To see all available routes:
-- `rails routes`
-
+### Currently (220405) using
+- ruby: 3.1.1
+- rails: 7.0.2.3
+- node: v16.14.2
+- npm: 8.5.0
 
 ## Models/Schema
 

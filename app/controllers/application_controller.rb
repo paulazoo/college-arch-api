@@ -46,7 +46,7 @@ class ApplicationController < ActionController::API
     Rails.logger.info "Decoded Token"
     Rails.logger.info decoded_hash
     if decoded_hash && !decoded_hash.empty?
-      if decoded_hash[0]['type'] == 'access'
+      if decoded_hash[0]['typ'] == 'access'
         user_id = decoded_hash[0]['user_id']
         @user = User.find(user_id)
       end
