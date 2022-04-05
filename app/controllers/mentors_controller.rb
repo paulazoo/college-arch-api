@@ -23,17 +23,6 @@ class MentorsController < ApplicationController
       @mentor.user = User.new(account: @mentor, email: mentor_params[:email])
 
       if @mentor.save
-        Analytics.identify(
-          user_id: @mentor.user.id.to_s,
-          traits: {
-            role: 'Mentor',
-            user_id: @mentor.user.id.to_s,
-            email: @mentor.user.email.to_s,
-            name: @mentor.user.name.to_s,
-            google_id: @mentor.user.google_id.to_s,
-          },
-        )
-
         render(json: @mentor.to_json, status: :created)
       else
         render(json: @mentor.errors, status: :unprocessable_entity)
@@ -56,17 +45,6 @@ class MentorsController < ApplicationController
       @mentor.user = User.new(account: @mentor, email: mentor_params[:email])
 
       if @mentor.save
-        Analytics.identify(
-          user_id: @mentor.user.id.to_s,
-          traits: {
-            role: 'Mentor',
-            user_id: @mentor.user.id.to_s,
-            email: @mentor.user.email.to_s,
-            name: @mentor.user.name.to_s,
-            google_id: @mentor.user.google_id.to_s,
-          },
-        )
-
         render(json: @mentor.to_json, status: :created)
       else
         render(json: @mentor.errors, status: :unprocessable_entity)
@@ -94,15 +72,6 @@ class MentorsController < ApplicationController
         @mentor.user = User.new(account: @mentor, email: email)
 
         if @mentor.save
-          Analytics.identify(
-            user_id: @mentor.user.id.to_s,
-            traits: {
-              role: 'Mentee',
-              user_id: @mentor.user.id.to_s,
-              email: email,
-            },
-          )
-
           finished_mentors.push(@mentor)
         else
           puts @mentor.errors

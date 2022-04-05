@@ -1,5 +1,5 @@
 {
-  "name": "congregate_api",
+  "name": "college_arch_api",
   "private": true,
   "dependencies": {
     "@rails/actioncable": "^6.0.0",

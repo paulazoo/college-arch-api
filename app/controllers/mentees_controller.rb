@@ -24,15 +24,6 @@ class MenteesController < ApplicationController
       @mentee.user = User.new(account: @mentee, email: mentee_params[:email])
 
       if @mentee.save
-        Analytics.identify(
-          user_id: @mentee.user.id.to_s,
-          traits: {
-            role: 'Mentee',
-            user_id: @mentee.user.id.to_s,
-            email: mentee_params[:email],
-          },
-        )
-
         render(json: @mentee.to_json, status: :created)
       else
         render(json: @mentee.errors, status: :unprocessable_entity)
@@ -96,15 +87,6 @@ class MenteesController < ApplicationController
         @mentee.user = User.new(account: @mentee, email: email)
 
         if @mentee.save
-          Analytics.identify(
-            user_id: @mentee.user.id.to_s,
-            traits: {
-              role: 'Mentee',
-              user_id: @mentee.user.id.to_s,
-              email: email,
-            },
-          )
-
           finished_mentees.push(@mentee)
         else
           puts @mentee.errors

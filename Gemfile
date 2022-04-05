@@ -20,7 +20,6 @@ gem 'jbuilder', '~> 2.7'
 
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'acts_as_list'
-gem 'analytics-ruby', '~> 2.2.7', require: 'segment/analytics'
 gem 'jwt'
 gem 'knock'
 gem 'rack-cors'
