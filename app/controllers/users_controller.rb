@@ -330,7 +330,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:image_url, :bio, :display_name, :phone, :school, :grad_year, :email, :age \
+    params.permit(:image_url, :bio, :display_name, :phone, :school, :grad_year, :email, :age, \
       :other_user_id, :google_token, \
       :applicant_user_id, :applicant_type, :multi_mentees, :info_share, :alt_school_email, \
       :city, :state,  :country, :essay, :first_name, :family_name, :us_living, \
