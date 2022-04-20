@@ -5,7 +5,7 @@ ruby '>=3.1.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.4.7'
-# try to get rid of net smtp error
+# try to get rid of net smtp error for deploying on heroku
 gem 'net-smtp', require: false
 gem 'net-pop', require: false
 gem 'net-imap', require: false

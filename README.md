@@ -51,6 +51,11 @@ To troubleshoot heroku:
 - _bio_: string, user bio
 - _school_: string, school
 - _grad_year_: integer, graduation year
+- _age_: integer, age
+- _info_share_: boolean, whether or not can share info with mentors (for mentees)
+- _dream_colleges_: string, dream colleges delimited by comma
+- _interests_: string, future major/career interests delimited by comma
+- _alt_school_email_: string, email for proving college attendance (for mentors) if not gmail
 - _account_type_: string, either `Mentor` or `Mentee`
 - _account_id_: integer, the id of the associated `Mentor` or `Mentee` record
 - belongs to an account
