@@ -271,6 +271,7 @@ class UsersController < ApplicationController
 
     @user.alt_school_email = user_params[:alt_school_email] if user_params[:alt_school_email]
     @user.multi_mentees = user_params[:multi_mentees] if user_params[:applicant_type] == "Mentor"
+    
     @user.account_type = user_params[:applicant_type]
     
     @user.status = "applied"
