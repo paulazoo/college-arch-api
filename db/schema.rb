@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_09_182559) do
+ActiveRecord::Schema.define(version: 2022_04_20_164554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,6 +205,10 @@ ActiveRecord::Schema.define(version: 2021_07_09_182559) do
     t.string "extra_component"
     t.integer "multi_mentees", default: 1
     t.string "status", default: "undecided"
+    t.boolean "info_share", default: true
+    t.integer "age"
+    t.string "dream_colleges"
+    t.string "alt_school_email"
     t.index ["account_type", "account_id"], name: "index_users_on_account_type_and_account_id"
   end
 
