@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   # testing
   post 'test' => 'users#test'
+  post 'manual_mentor' => 'users#manual_mentor'
 
   # authentication and login
   post 'google_login' => 'users#google_login'

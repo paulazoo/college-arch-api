@@ -19,6 +19,23 @@ class UsersController < ApplicationController
       render(json: @user.errors, status: :unprocessable_entity)
     end
   end
+ 
+  # POST /manual_mentor
+  def manual_mentor
+    @user = User.find_by(email: "rina.nagashima@gmail.com")
+
+    if @user.blank?
+      @user = User.new(email: "rina.nagashima@gmail.com")
+      @user.account = Mentor.new()
+    end
+    @user.status = "accepted"
+
+    if @user.save
+      render(json: @user, status: :created)
+    else
+      render(json: @user.errors, status: :unprocessable_entity)
+    end
+  end
 
   # POST /google_login
   def google_login
