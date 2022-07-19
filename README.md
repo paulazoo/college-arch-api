@@ -17,9 +17,10 @@ Requires:
 - node and npm
 - ruby
 - rails
-  - `gem install rails`
+- postgresql
 - run `bundle install`
   - may need to delete Gemfile.lock
+  - may need to install postgresql first
   - then run `bundle install` again
 - postgresql
   - create a db named `college_arch` with user `college_arch`
