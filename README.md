@@ -38,6 +38,11 @@ To troubleshoot heroku:
 - node: v16.14.2
 - npm: 8.5.0
 
+### Matching (220802)
+- Match accepted request: https://college-arch-api.herokuapp.com/google_sheets/match_accepted
+
+- Matches in the google sheets match_accepted_2022 shared with the google api client email
+
 ## Models/Schema
 
 ### User
