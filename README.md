@@ -7,9 +7,9 @@ API backend for College Arch website, written in Ruby on Rails by Paula Zhu.
 You can only request the server from the following origins:
 
 - https://www.collegearch.org
-- https://college-arch.herokuapp.com/
+- https://master.d2o0p7o05o2o4b.amplifyapp.com
 - http://localhost:3000
-
+- no longer from https://college-arch.herokuapp.com/
 
 ## Setup
 

@@ -33,7 +33,7 @@ module CollegeArchApi
 
     config.middleware.insert_before(0, Rack::Cors) do
       allow do
-        origins 'college-arch.herokuapp.com', 'localhost:3000', '127.0.0.1:3000', 'collegearch.org', 'www.collegearch.org'
+        origins 'master.d2o0p7o05o2o4b.amplifyapp.com', 'localhost:3000', '127.0.0.1:3000', 'collegearch.org', 'www.collegearch.org'
         resource '*', headers: :any, methods: %i[get post delete put patch options head]
       end
     end

@@ -42,7 +42,7 @@ Rails.application.configure do
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
   config.web_socket_server_url = 'wss://college-arch-api.herokuapp.com/websocket'
-  config.action_cable.allowed_request_origins = ['https://college-arch.herokuapp.com', 'http://localhost:3000', 'https://www.collegearch.org']
+  config.action_cable.allowed_request_origins = ['https://master.d2o0p7o05o2o4b.amplifyapp.com', 'http://localhost:3000', 'https://www.collegearch.org']
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
