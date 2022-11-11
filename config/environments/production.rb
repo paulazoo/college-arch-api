@@ -41,7 +41,7 @@ Rails.application.configure do
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
-  config.web_socket_server_url = 'wss://college-arch-api.herokuapp.com/websocket'
+  config.web_socket_server_url = 'wss://production.eba-udq9vep6.us-east-2.elasticbeanstalk.com/websocket'
   config.action_cable.allowed_request_origins = ['https://master.d2o0p7o05o2o4b.amplifyapp.com', 'http://localhost:3000', 'https://www.collegearch.org']
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
