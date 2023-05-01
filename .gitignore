@@ -35,9 +35,11 @@ client_secret.json
 yarn-debug.log*
 .yarn-integrity
 
-.elasticbeanstalk
+# For heroku deployment
+# Gemfile.lock
 
 # Elastic Beanstalk Files
+.elasticbeanstalk
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
