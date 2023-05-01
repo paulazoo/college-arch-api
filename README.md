@@ -32,7 +32,7 @@ To run locally:
 To troubleshoot heroku:
 - `heroku run console -a college-arch-api`
 
-### Currently (220719) using
+### Currently (230501) using
 - ruby: 3.1.1
 - rails: 6.0.4.7
 - node: v16.14.2
