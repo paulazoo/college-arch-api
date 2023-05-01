@@ -4,12 +4,12 @@
 ## Deploy:
 - delete Gemfile.lock
 - run `bundle install`
-- `bundle lock --add-platform x86_64-linux` bc otherwise only ["arm64-darwin-21"] error
+- run `bundle lock --add-platform x86_64-linux` bc otherwise only ["arm64-darwin-21"] error
     - needs to give the following output:
     - Fetching gem metadata from https://rubygems.org/.........
     - Resolving dependencies.......
     - Writing lockfile to /Users/paulazhu/coding/college-arch-api/Gemfile.lock
-- `git add .`, `git commit "msg"`
+- `git add .`, `git commit "msg"` to actually commit changes
 - `git push origin master` if needed
 - `git push -f heroku master`
 
