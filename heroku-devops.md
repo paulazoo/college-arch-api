@@ -9,6 +9,7 @@
     - Fetching gem metadata from https://rubygems.org/.........
     - Resolving dependencies.......
     - Writing lockfile to /Users/paulazhu/coding/college-arch-api/Gemfile.lock
+- `heroku ps:scale web=1`
 - `git add .`, `git commit "msg"` to actually commit changes
 - `git push origin master` if needed
 - `git push -f heroku master`
