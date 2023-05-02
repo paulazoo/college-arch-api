@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   # testing
   post 'test' => 'users#test'
-  post 'manual_mentor' => 'users#manual_mentor'
 
   # authentication and login
   post 'google_login' => 'users#google_login'
@@ -23,6 +22,7 @@ Rails.application.routes.draw do
 
   post 'mentors/batch' => 'mentors#batch'
   post 'mentors/master' => 'mentors#master'
+  post 'mentors/master_accept' => 'mentors#master_accept'
 
   resources :mentors, only: %i[index create]
 

@@ -269,6 +269,7 @@ class UsersController < ApplicationController
     
     @user.info_share = user_params[:info_share] if user_params[:info_share]
     @user.dream_colleges = user_params[:dream_colleges] if user_params[:dream_colleges]
+    @user.importance = user_params[:importance] if user_params[:importance]
 
     @user.alt_school_email = user_params[:alt_school_email] if user_params[:alt_school_email]
     @user.multi_mentees = user_params[:multi_mentees] if user_params[:applicant_type] == "Mentor"
@@ -336,7 +337,7 @@ class UsersController < ApplicationController
       :other_user_id, :google_token, \
       :applicant_user_id, :applicant_type, :multi_mentees, :info_share, :alt_school_email, \
       :city, :state,  :country, :essay, :first_name, :family_name, :us_living, \
-      :interests, :backgrounds, :dream_colleges, \
+      :interests, :backgrounds, :dream_colleges, :importance, \
       :status, :user
     )
   end

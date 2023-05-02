@@ -61,6 +61,8 @@ To troubleshoot heroku:
 - _info_share_: boolean, whether or not can share info with mentors (for mentees)
 - _dream_colleges_: string, dream colleges delimited by comma
 - _interests_: string, future major/career interests delimited by comma
+- _importance_: string, mentee's importance for matching, e.g. `2 1 3 4`
+  - 1) College, 2) Academic/Career Interests, 3) Background Identity, 4) Hometown Location
 - _alt_school_email_: string, email for proving college attendance (for mentors) if not gmail
 - _account_type_: string, either `Mentor` or `Mentee`
 - _account_id_: integer, the id of the associated `Mentor` or `Mentee` record
