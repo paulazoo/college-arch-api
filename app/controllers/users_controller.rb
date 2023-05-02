@@ -254,7 +254,8 @@ class UsersController < ApplicationController
     @user.phone = user_params[:phone] if user_params[:phone]
     @user.school = user_params[:school] if user_params[:school]
     @user.grad_year = user_params[:grad_year] if user_params[:grad_year]
-    @user.grad_year = 2023 if user_params[:applicant_type] == "Mentee"
+    # class year to change
+    @user.grad_year = 2024 if user_params[:applicant_type] == "Mentee"
     @user.given_name = user_params[:first_name] if user_params[:first_name]
     @user.family_name = user_params[:family_name] if user_params[:family_name]
     @user.age = user_params[:age] if user_params[:age]

@@ -286,7 +286,8 @@ class GoogleSheetsController < ApplicationController
     # MentorsMentee.destroy_all
 
     session = GoogleDrive::Session.from_service_account_key("client_secret.json")
-    spreadsheet = session.spreadsheet_by_title('match_accepted_2022')
+    # class year to change
+    spreadsheet = session.spreadsheet_by_title('match_accepted_2023')
     worksheet = spreadsheet.worksheets.first
     rows = worksheet.rows
     headers, *data = rows
@@ -296,7 +297,8 @@ class GoogleSheetsController < ApplicationController
 
       @mentee_user = User.find_by(email: r[0])
       @mentee_user = User.new(email: r[0]) if @mentee_user.blank?
-      @mentee_user.grad_year = 2022
+      # class year to change
+      @mentee_user.grad_year = 2024
       @mentee_user.status = "accepted"
       
       if @mentee_user.account.blank?
