@@ -55,6 +55,25 @@ class MentorsController < ApplicationController
     end
   end
 
+  # POST /mentors/master_accept
+  def master_accept
+    render(json: { message: 'Wrong master creation password' }, status: :unauthorized) if mentor_params[:master_creation_password] != 'college_arch_master_creation_password'
+
+    @user = User.find_by(email: mentor_params[:email])
+
+    if @user.blank?
+      @user = User.new(email: mentor_params[:email])
+      @user.account = Mentor.new()
+    end
+    @user.status = "accepted"
+
+    if @user.save
+      render(json: @user, status: :created)
+    else
+      render(json: @user.errors, status: :unprocessable_entity)
+    end
+  end
+
   # POST /mentors/batch
   def batch
     render(json: { message: 'You are not master' }, status: :unauthorized) if !is_master

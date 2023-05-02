@@ -117,6 +117,8 @@ _IMPORTANT: for all endpoints EXCEPT for:
   - POST /newsletter_emails
   - GET /events/public
   - POST /mentors/master
+  - POST /mentors/master_accept
+  - POST /users/test
 you must pass a Google OAuth JWT authorization token. Pass via the following request header:_
 
 `Authorization: Bearer [TOKEN]`
@@ -127,6 +129,7 @@ you must pass a Google OAuth JWT authorization token. Pass via the following req
 - _GET /users/:id_: returns user information corresponding to `:id` (MUST be same user as `current_user` or `is_master`)
 - _PUT /users/:id_: updates user information corresponding to `:id` (MUST be same user as `current_user` or `is_master`)
 - _POST /users/master_update_: update another person's user information corresponding to `:other_user_id` (MUST BE `is_master`)
+- _POST /test_: test api function
 
 ### Mentee
 - _GET /mentees_: returns list of all mentees (MUST be `is_master`)
@@ -147,7 +150,8 @@ you must pass a Google OAuth JWT authorization token. Pass via the following req
   - allowed params: `:batch_emails` as a string of emails delimited by `, `
 - _POST /mentors/master_: creation of master user
   - allowed params: `:email`, `:master_creation_password`
-
+- _POST /mentors/master_accept_: manually make a user that is a mentor and of `accepted` status
+  - allowed params: `:email` as the email of associated user, `:master_creation_password`
 
 ### Newsletter Email
 - _GET /events_: returns list of all events (MUST be `is_master`)
